@@ -1,0 +1,10 @@
+export const LOAD_ORDERS = 'LOAD_ORDERS';
+export const LOAD_USER = 'LOAD_USER';
+export const ORDERS_LOADING = 'ORDERS_LOADING';
+export const USER_LOADING = 'USER_LOADING';
+export const ORDERS_FAILED = 'ORDERS_FAILED';
+export const USER_FAILED = 'USER_FAILED';
+export const CREATE_ORDER = 'CREATE_ORDER';
+export const UPDATE_PROFILE = 'UPDATE_PROFILE';
+export const CANCEL_ORDER = 'CANCEL_ORDER';
+export const CONFIRM_ORDER = 'CONFIRM_ORDER';
