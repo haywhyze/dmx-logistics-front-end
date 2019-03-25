@@ -1,4 +1,55 @@
 .dmx-color {
-  color: #990000 !important;
-  text-shadow: .1px .1px .5px white;
+  background-color: #990000 !important;
+  color: white !important;
+}
+
+.sidebar-menu {
+  min-height: 100vh !important;
+}
+
+@media (min-width: 768px) {
+  #sidebar {
+    font-size: 150%;
+    display: flex;
+    position: fixed;
+  }
+
+  #sidebar .ui.vertical.menu {
+    width: 17rem;
+    font-size: 1.1rem;
+  }
+
+  .main {
+    margin-left: 20em;
+  }
+
+  .new {
+    width: 30em;
+  }
+}
+
+#mobile-menu {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .main {
+    margin-left: 20%;
+  }
+
+  .ui.table {
+    text-align: center;
+  }
+
+  .sidebar-menu {
+    min-height: auto !important;
+  }
+
+  #mobile-menu {
+    display: inline-block;
+  }
+
+  .new {
+    max-width: 30em;
+  }
 }
