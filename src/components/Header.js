@@ -32,7 +32,7 @@ export default class Header extends Component {
     return (
       <>
         <Menu fixed='top' inverted>
-          <Container>
+          <Container fluid>
             <NavLink to="/">
               <Menu.Item header>
                 <Image size='tiny' src='/dmx-logo.jpg' style={{ marginRight: '1em' }} />

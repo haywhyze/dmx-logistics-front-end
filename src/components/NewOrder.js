@@ -13,16 +13,21 @@ class NewOrder extends Component {
         senderPhone: '',
         senderEmail: '',
         senderAddress: '',
+        senderState: '',
+        senderCountry: '',
         
         recipientName: '',
         recipientPhone: '',
         recipientEmail: '',
         recipientAddress: '',
+        recipientState: '',
+        recipientCountry: '',
         
         itemDescription: '',
         paymentStatus: '',
-        weight: '',
+        weight: 1,
         extraInfo: '',
+        priceEstimate: '',
     }
 
     nextStep = () => {
@@ -55,10 +60,14 @@ class NewOrder extends Component {
             senderPhone,
             senderEmail,
             senderAddress,
+            senderState,
+            senderCountry,
             recipientName,
             recipientPhone,
             recipientEmail,
             recipientAddress,
+            recipientState,
+            recipientCountry,
             itemDescription,
             paymentStatus,
             weight,
@@ -69,10 +78,14 @@ class NewOrder extends Component {
             senderPhone,
             senderEmail,
             senderAddress,
+            senderState,
+            senderCountry,
             recipientName,
             recipientPhone,
             recipientEmail,
             recipientAddress,
+            recipientState,
+            recipientCountry,
             itemDescription,
             paymentStatus,
             weight,
@@ -83,12 +96,14 @@ class NewOrder extends Component {
             return <SenderDetails 
                     nextStep={this.nextStep} 
                     updateState = {this.updateState}
+                    handleChange = {this.handleChange}
                     values={values}
                     />
         case 2:
             return <RecipientDetails 
                     nextStep={this.nextStep}
                     prevStep={this.prevStep}
+                    updateState = {this.updateState}
                     handleChange = {this.handleChange}
                     values={values}
                     />
@@ -96,7 +111,7 @@ class NewOrder extends Component {
           return <OrderDetails 
                   nextStep={this.nextStep}
                   prevStep={this.prevStep}
-                  handleChange = {this.handleChange}
+                  updateState = {this.updateState}
                   values={values}
                   />
         case 4:

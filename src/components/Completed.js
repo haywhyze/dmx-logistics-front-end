@@ -1,43 +1,69 @@
 import React from 'react'
-import { Icon, Button, Label, Menu, Header, Table } from 'semantic-ui-react'
+import { Link } from 'react-router-dom';
+import { Icon, Button, Label, Header, Table } from 'semantic-ui-react'
 
-const Orders = () => (
-  <div style={{ display: 'inline-flex', flexDirection: 'column', marginTop: '5em', marginLeft: '2em'}}>
-    <Header as='h3' dividing>
-    My Delivery Orders
-  </Header>
-    <Table celled>
-    <Table.Header>
-      <Table.Row>
-        <Table.HeaderCell>Order Id</Table.HeaderCell>
-        <Table.HeaderCell>Amount</Table.HeaderCell>
-        <Table.HeaderCell>Date Ordered</Table.HeaderCell>
-        <Table.HeaderCell>Status</Table.HeaderCell>
-        <Table.HeaderCell>View Details</Table.HeaderCell>
-      </Table.Row>
-    </Table.Header>
-
-    <Table.Body>
-      <Table.Row>
+const RenderOrderItem = ({ order }) => {
+  console.log(order);
+  return (
+    <Table.Row key={order.id}>
       <Table.Cell>
-          <Label color="green" ribbon>369002</Label>
+        <Label 
+          color="green" 
+          ribbon>
+          {order.id}
+        </Label>
+      </Table.Cell>
+      <Table.Cell>
+        <Label color="black">
+        &#8358;{Number(order.price)}
+        </Label>
         </Table.Cell>
-        <Table.Cell>#4500</Table.Cell>
-        <Table.Cell>07/11/2019</Table.Cell>
-        <Table.Cell positive>
-        <Icon name="checkmark box" />
-        Delivered</Table.Cell>
-        <Table.Cell>
-        <Button primary animated='vertical'>
-          <Button.Content hidden>Detailed View</Button.Content>
-          <Button.Content visible>
-            Show More
-          </Button.Content></Button>
-        </Table.Cell>
-      </Table.Row>
-    </Table.Body>
-  </Table>
-  </div>
-)
+      <Table.Cell>{new Date(order.createdAt).toDateString()}</Table.Cell>
+      <Table.Cell>
+      {
+        (<p><Icon name="checkmark" /> Delivered</p>)
+      }
+      </Table.Cell>
+      <Table.Cell>
+      <Link to={`/orders/${order.id}`}>
+          <Button className="dmx-color" animated='vertical'>
+            <Button.Content hidden>Detailed View</Button.Content>
+            <Button.Content visible>
+              Show More
+            </Button.Content>
+          </Button>
+        </Link>
+      </Table.Cell>
+    </Table.Row>
+  );
+}
 
-export default Orders
+const Completed = props => {
+  const order = props.orders.map(order => (
+    <RenderOrderItem order={order} />
+  ));
+  return (
+    <div className='main' style={{ width: '60%', display: 'flex', flexDirection: 'column', marginTop: '1em'}}>
+      <Header as='h3' dividing>
+        My Active Orders
+      </Header>
+      <Table celled>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>Order Id</Table.HeaderCell>
+            <Table.HeaderCell>Amount</Table.HeaderCell>
+            <Table.HeaderCell>Date Ordered</Table.HeaderCell>
+            <Table.HeaderCell>Status</Table.HeaderCell>
+            <Table.HeaderCell>View Details</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+          {order}
+        <Table.Body>
+    
+        </Table.Body>
+      </Table>
+    </div>
+  );
+} 
+
+export default Completed

@@ -18,19 +18,21 @@ class Confirmation extends Component{
           senderName, 
           senderPhone, 
           senderEmail, 
-          senderAddress, 
+          senderAddress,
+          senderState,
+          senderCountry, 
           recipientName, 
           recipientPhone,
           recipientEmail,
           recipientAddress,
+          recipientState,
+          recipientCountry,
           paymentStatus,
           weight,
           extraInfo,
           itemDescription,
-          values,
          }
         } = this.props;
-        console.log(this.props);
         return(
             <div>
                 <h1 className="ui centered">Confirm your Details</h1>
@@ -55,6 +57,14 @@ class Confirmation extends Component{
                         <List.Content>Sender Address: {senderAddress}</List.Content>
                     </List.Item>
                     <List.Item>
+                        <List.Icon name='marker' />
+                        <List.Content>Sender State: {senderState}</List.Content>
+                    </List.Item>
+                    <List.Item>
+                        <List.Icon name='marker' />
+                        <List.Content>Sender Country: {senderCountry}</List.Content>
+                    </List.Item>
+                    <List.Item>
                         <List.Icon name='user' />
                         <List.Content>Recipient Name: {recipientName}</List.Content>
                     </List.Item>
@@ -71,6 +81,14 @@ class Confirmation extends Component{
                     <List.Item>
                         <List.Icon name='marker' />
                         <List.Content>Recipient Address: {recipientAddress}</List.Content>
+                    </List.Item>
+                    <List.Item>
+                        <List.Icon name='marker' />
+                        <List.Content>Recipient State: {recipientState}</List.Content>
+                    </List.Item>
+                    <List.Item>
+                        <List.Icon name='marker' />
+                        <List.Content>Recipient Country: {recipientCountry}</List.Content>
                     </List.Item>
                     <List.Item>
                         <List.Icon name='info' />

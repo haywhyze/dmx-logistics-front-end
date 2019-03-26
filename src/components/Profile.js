@@ -74,10 +74,11 @@ const Profile = () => (
           label='Confirm New Password'
           placeholder='confirm new password'
         />
-        <Button className="dmx-color">
+        
+      </Form.Group>
+      <Button className="dmx-color">
           Change Password
         </Button>
-      </Form.Group>
     </Form>
   </div>
 )

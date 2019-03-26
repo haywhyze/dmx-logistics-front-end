@@ -1,61 +1,82 @@
 import React from 'react'
-import { Icon, Button, Label, Menu, Header, Table } from 'semantic-ui-react'
+import { Link } from 'react-router-dom';
+import { Icon, Button, Label, Header, Table } from 'semantic-ui-react'
 
-const Current = () => (
-  <div style={{ display: 'inline-flex', flexDirection: 'column', marginTop: '5em', marginLeft: '2em'}}>
-    <Header as='h3' dividing>
-    My Delivery Orders
-  </Header>
-    <Table celled>
-    <Table.Header>
-      <Table.Row>
-        <Table.HeaderCell>Order Id</Table.HeaderCell>
-        <Table.HeaderCell>Amount</Table.HeaderCell>
-        <Table.HeaderCell>Date Ordered</Table.HeaderCell>
-        <Table.HeaderCell>Status</Table.HeaderCell>
-        <Table.HeaderCell>View Details</Table.HeaderCell>
-      </Table.Row>
-    </Table.Header>
-
-    <Table.Body>
-      <Table.Row>
-        <Table.Cell>
-          <Label color="blue" ribbon>369002</Label>
-        </Table.Cell>
-        <Table.Cell>#4500</Table.Cell>
-        <Table.Cell>07/11/2019</Table.Cell>
-        <Table.Cell>Processing</Table.Cell>
-        <Table.Cell>
-        <Button primary animated='vertical'>
-          <Button.Content hidden>Detailed View</Button.Content>
-          <Button.Content visible>
-            Show More
-          </Button.Content></Button>
-        </Table.Cell>
-      </Table.Row>
-      <Table.Row>
-      </Table.Row>
-      <Table.Row>
+const RenderOrderItem = ({ order }) => {
+  console.log(order);
+  return (
+    <Table.Row key={order.id}>
       <Table.Cell>
-          <Label color="teal" ribbon>369002</Label>
+        <Label 
+          color={ 
+            order.status === 'processing' ? 
+              "blue" : 
+            order.status === 'confirmed' ? 
+              "orange" :
+            order.status === 'in transit' ?
+              "teal" : "black" 
+            } 
+          ribbon>
+          {order.id}
+        </Label>
+      </Table.Cell>
+      <Table.Cell>
+        <Label color="black">
+        &#8358;{Number(order.price)}
+        </Label>
         </Table.Cell>
-        <Table.Cell>#4500</Table.Cell>
-        <Table.Cell>07/11/2019</Table.Cell>
-        <Table.Cell>
-        <Icon name="bicycle" />
-          In Transit
-        </Table.Cell>
-        <Table.Cell>
-        <Button primary animated='vertical'>
-          <Button.Content hidden>Detailed View</Button.Content>
-          <Button.Content visible>
-            Show More
-          </Button.Content></Button>
-        </Table.Cell>
-      </Table.Row>
-    </Table.Body>
-  </Table>
-  </div>
-)
+      <Table.Cell>{new Date(order.createdAt).toDateString()}</Table.Cell>
+      <Table.Cell>
+      {     
+        order.status === 'processing' ? 
+          (<p><Icon name="wait" /> Processing</p>) : 
+        order.status === 'confirmed' ? 
+          (<p><Icon name="checkmark" /> Confirmed</p>) :
+        order.status === 'in transit' ?
+          (<p><Icon name="bicycle" /> In Transit</p>) :
+        (<p><Icon name="x" /> Cancelled</p>)
+      }
+      </Table.Cell>
+      <Table.Cell>
+      <Link to={`/orders/${order.id}`}>
+          <Button className="dmx-color" animated='vertical'>
+            <Button.Content hidden>Detailed View</Button.Content>
+            <Button.Content visible>
+              Show More
+            </Button.Content>
+          </Button>
+        </Link>
+      </Table.Cell>
+    </Table.Row>
+  );
+}
 
-export default Current;
+const Current = props => {
+  const order = props.orders.map(order => (
+    <RenderOrderItem order={order} />
+  ));
+  return (
+    <div className='main' style={{ width: '60%', display: 'flex', flexDirection: 'column', marginTop: '1em'}}>
+      <Header as='h3' dividing>
+        My Active Orders
+      </Header>
+      <Table celled>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>Order Id</Table.HeaderCell>
+            <Table.HeaderCell>Amount</Table.HeaderCell>
+            <Table.HeaderCell>Date Ordered</Table.HeaderCell>
+            <Table.HeaderCell>Status</Table.HeaderCell>
+            <Table.HeaderCell>View Details</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+          {order}
+        <Table.Body>
+    
+        </Table.Body>
+      </Table>
+    </div>
+  );
+} 
+
+export default Current

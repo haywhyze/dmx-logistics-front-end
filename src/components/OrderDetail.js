@@ -1,32 +1,46 @@
 import React from 'react'
 import { Statistic, Card, Button, Label, Grid, Segment, Header, Icon } from 'semantic-ui-react'
+import _ from 'lodash'
 
-const OrderDetails = () => (
-  <div style={{ display: 'inline-flex', width:'70%', flexDirection: 'column', marginTop: '5em', marginLeft: '2em'}}>
+const OrderDetails = (props) => (
+  <div className='main' style={{ width: '60%', display: 'flex', flexDirection: 'column', marginTop: '1em'}}>
     <Header 
     as='h3' 
     dividing 
     content='Order Details'
-    subheader='369002'
+    subheader={props.order.id}
     />
-    
   <Grid stackable columns={3}>
       <Grid.Column>
       Item Description
-      <Segment color='black'>A set of shoes and jewelleries from lagos to kaduna just for the sake of it</Segment>
+      <Segment color='black'>{props.order.itemDescription}</Segment>
       </Grid.Column>
       <Grid.Column>
       Status
-      <Segment textAlign='center' color='blue' inverted>Processing</Segment>
+      <Segment 
+        textAlign='center' 
+        color={ 
+          props.order.status === 'processing' ? 
+            "blue" : 
+          props.order.status === 'confirmed' ? 
+            "orange" :
+          props.order.status === 'in transit' ?
+            "teal" :
+          props.order.status === 'delivered' ?
+            "green" : "black" 
+          } 
+        inverted>
+          {_.capitalize(props.order.status)}
+      </Segment>
       </Grid.Column>
       <Grid.Column>
         Date Ordered
-      <Segment textAlign='right'>{new Date().toLocaleString()}</Segment>
+      <Segment textAlign='right'>{new Date(props.order.createdAt).toDateString()}</Segment>
       </Grid.Column>
       <Grid.Column textAlign='center' width={8}>
       <Segment textAlign='center' className='dmx-color' inverted>
         <Statistic size='tiny' className='dmx-color' inverted>
-          <Statistic.Value>&#8358;2,400</Statistic.Value>
+          <Statistic.Value>&#8358;{props.order.price}</Statistic.Value>
           <Statistic.Label>Price</Statistic.Label>
         </Statistic>
       </Segment>
@@ -35,7 +49,7 @@ const OrderDetails = () => (
     <Grid.Column textAlign='center' width={8}>
     <Segment textAlign='center' inverted>
       <Statistic size='tiny' inverted>
-        <Statistic.Value>Recipient To Pay</Statistic.Value>
+        <Statistic.Value>{_.upperCase(props.order.paymentStatus)}</Statistic.Value>
         <Statistic.Label>Payment Method</Statistic.Label>
       </Statistic>
       </Segment>
@@ -43,18 +57,18 @@ const OrderDetails = () => (
     <Grid.Column textAlign='center' width={8}>
     <Card
     fluid >
-    <Card.Content header='Rick Sanchez' />
-    <Card.Content meta={(<span><Icon name='phone' /> 08031961496</span>)} />
-    <Card.Content description={(<><Icon name='map marker alternate' /> Oshodi/Isolo, Lagos, Nigeria</>)} />
+    <Card.Content header={_.upperFirst(props.order.senderName)} />
+    <Card.Content meta={(<span><Icon name='phone' /> {props.order.senderPhone}</span>)} />
+    <Card.Content description={(<><Icon name='map marker alternate' /> {props.order.senderAddress}</>)} />
     </Card>
     <Label size='tiny' attached='top left'><Icon name='truck' /> Pick Up Details</Label>
     </Grid.Column>
     <Grid.Column textAlign='center' width={8}>
     <Card
     fluid >
-    <Card.Content header='Rick Sanchez' />
-    <Card.Content meta={(<span><Icon name='phone' /> 08031961496</span>)} />
-    <Card.Content description={(<><Icon name='map marker alternate' /> Oshodi/Isolo, Lagos, Nigeria</>)} />
+    <Card.Content header={_.upperFirst(props.order.recipientName)} />
+    <Card.Content meta={(<span><Icon name='phone' /> {props.order.recipientPhone}</span>)} />
+    <Card.Content description={(<><Icon name='map marker alternate' /> {props.order.recipientAddress}</>)} />
     </Card>
     <Label size='tiny' attached='top left'><Icon name='truck' /> Delivery Details</Label>
     </Grid.Column>

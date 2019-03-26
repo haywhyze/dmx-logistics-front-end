@@ -38,7 +38,7 @@ export default class Sidebar extends Component {
       <Menu vertical inverted className=' sidebar-menu dmx-color'>
       <NavLink to="/new">
         <Menu.Item name='new' active={activeItem === 'new'} onClick={this.handleItemClick}>
-          <Label color='teal'>+</Label>
+          <Label color='green'>+</Label>
           Request a delivery
         </Menu.Item>
         </NavLink>
@@ -52,7 +52,7 @@ export default class Sidebar extends Component {
         </NavLink>
         <NavLink to="/completed">
         <Menu.Item name='delivered' active={activeItem === 'delivered'} onClick={this.handleItemClick}>
-          <Label color="black">22</Label>
+          <Label color="olive">22</Label>
           
           Delivered Orders
           
@@ -60,7 +60,7 @@ export default class Sidebar extends Component {
         </NavLink>
         <NavLink to="/">
         <Menu.Item name='all' active={activeItem === 'all'} onClick={this.handleItemClick}>
-          <Label>24</Label>
+          <Label color="black">24</Label>
           
           All My Orders
           
@@ -74,14 +74,14 @@ export default class Sidebar extends Component {
           
         </Menu.Item>
         </NavLink>
-        <Menu.Item name='payment' active={activeItem === 'payment'} onClick={this.handleItemClick}>
+        {/* <Menu.Item name='payment' active={activeItem === 'payment'} onClick={this.handleItemClick}>
           <Icon name="money" />
           Payment
         </Menu.Item>
         <Menu.Item name='quote' active={activeItem === 'quote'} onClick={this.handleItemClick}>
           <Icon name="calculator" />
           Get Quote
-        </Menu.Item>
+        </Menu.Item> */}
       </Menu>
       
       </Collapse>
