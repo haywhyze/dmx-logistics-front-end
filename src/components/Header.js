@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
-import { Menu, Container, Icon, Image, Dropdown, Item } from 'semantic-ui-react'
+import { Menu, Container, Icon, Image, Dropdown, Item, Button } from 'semantic-ui-react'
 import { NavLink } from 'react-router-dom';
-
+import Auth from '../auth';
 
 export default class Header extends Component {
-
   
  trigger = (
     <span>
-      <Icon name='user' /> Hello, Bob
+      <Icon name='user' /> Hello, {this.props.user.firstName}
     </span>
   )
   
@@ -17,18 +16,21 @@ export default class Header extends Component {
       key: 'user',
       text: (
         <span>
-          Signed in as <strong>Bob Smith</strong>
+          Call us on <strong>{this.props.user.phoneNumber}</strong>
         </span>
       ),
       disabled: true,
     },
     { key: 'profile', text: ( <Item as="a" href="/profile" style={{color: 'black', padding: 0}}>My Profile</Item>) },
-    { key: 'number', text: '08031961496', disabled: true },
-    { key: 'sign-out', text: 'Sign Out' },
+    { key: 'faq', text: ( <Item as="a" href="/faq" style={{color: 'black', padding: 0}}>FAQ</Item>) },
+    { key: 'how-to-pay', text: ( <Item as="a" href="/how-to-pay" style={{color: 'black', padding: 0}}>How to Pay</Item>) },
+    { key: 'contact', text: ( <Item as="a" href="/contact" style={{color: 'black', padding: 0}}>Contact Us</Item>) },
+    { key: 'number', text: this.props.user.phoneNumber, disabled: true },
+    { key: 'sign-out', text: (<Item as='a' style={{color: 'black', padding: 0}} onClick={() => Auth.signout(() => this.props.history.push('/login'))}>Sign Out</Item>) },
   ]
   
   render() {
-
+    console.log()
     return (
       <>
         <Menu fixed='top' inverted>
@@ -40,16 +42,29 @@ export default class Header extends Component {
             </NavLink>
             
             <Menu.Menu position="right">
-              <Dropdown item simple icon="info" >
-                <Dropdown.Menu>
-                  <Dropdown.Item>FAQ</Dropdown.Item>
-                  <Dropdown.Item>How to Pay</Dropdown.Item>
-                  <Dropdown.Divider />
-                  <Dropdown.Header>Call Us Now</Dropdown.Header>
-                  <Dropdown.Item>+234(803)1961496</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-              <Dropdown item trigger={this.trigger} options={this.options}/>
+            { Auth.isAuthenticated() ? 
+              (
+                <Dropdown item trigger={this.trigger} options={this.options}/>
+              )
+              : (
+                <>
+                  {
+                    this.props.location.pathname === '/login' &&
+                    (<Menu.Item >
+                      <Button as='a' href="/register" color="green">Sign up</Button>
+                    </Menu.Item>)
+                  }
+                  {
+                    this.props.location.pathname === '/register' &&
+                    (
+                      <Menu.Item>
+                        <Button as='a' href="/login">Log-in</Button>
+                      </Menu.Item>
+                    )
+                  }
+                </>
+              )
+            }
             </Menu.Menu>
           </Container>
         </Menu>

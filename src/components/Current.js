@@ -3,9 +3,8 @@ import { Link } from 'react-router-dom';
 import { Icon, Button, Label, Header, Table } from 'semantic-ui-react'
 
 const RenderOrderItem = ({ order }) => {
-  console.log(order);
   return (
-    <Table.Row key={order.id}>
+    <>
       <Table.Cell>
         <Label 
           color={ 
@@ -47,13 +46,15 @@ const RenderOrderItem = ({ order }) => {
           </Button>
         </Link>
       </Table.Cell>
-    </Table.Row>
+      </>
   );
 }
 
 const Current = props => {
   const order = props.orders.map(order => (
+    <Table.Row key={order.id}>
     <RenderOrderItem order={order} />
+    </Table.Row>
   ));
   return (
     <div className='main' style={{ width: '60%', display: 'flex', flexDirection: 'column', marginTop: '1em'}}>
@@ -70,9 +71,8 @@ const Current = props => {
             <Table.HeaderCell>View Details</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
-          {order}
         <Table.Body>
-    
+        {order}
         </Table.Body>
       </Table>
     </div>

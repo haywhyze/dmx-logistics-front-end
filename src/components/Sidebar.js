@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Label, Icon, Menu } from 'semantic-ui-react'
 import { Collapse } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
-
+import Auth from '../auth';
 export default class Sidebar extends Component {
 
   constructor(props) {
@@ -10,10 +10,8 @@ export default class Sidebar extends Component {
 
     this.state = {
       isNavOpen: false,
-      activeItem: 'inbox',
     }
     this.toggleNav = this.toggleNav.bind(this);
-    this.handleItemClick = this.handleItemClick.bind(this);
   }
 
   toggleNav() {
@@ -23,57 +21,41 @@ export default class Sidebar extends Component {
     console.log(this.state.isNavOpen)
   }
 
-
-  handleItemClick(e, { name }) {
-    this.setState({ activeItem: name })
-  } 
-
   render() {
-    const { activeItem } = this.state
 
     return (
       <div fixed="top" style={{ paddingTop: '3.8em' }}>
       <Collapse id="sidebar" isOpen={this.state.isNavOpen} >
       
       <Menu vertical inverted className=' sidebar-menu dmx-color'>
-      <NavLink to="/new">
-        <Menu.Item name='new' active={activeItem === 'new'} onClick={this.handleItemClick}>
+        {Auth.isAuthenticated() && (
+          <NavLink className='item' to="/new">
           <Label color='green'>+</Label>
           Request a delivery
-        </Menu.Item>
-        </NavLink>
-        <NavLink to="/current">
-        <Menu.Item name='active' active={activeItem === 'active'} onClick={this.handleItemClick}>
-          <Label color="blue">3</Label>
-          
-          Active Orders
-          
-        </Menu.Item>
-        </NavLink>
-        <NavLink to="/completed">
-        <Menu.Item name='delivered' active={activeItem === 'delivered'} onClick={this.handleItemClick}>
-          <Label color="olive">22</Label>
-          
-          Delivered Orders
-          
-        </Menu.Item>
-        </NavLink>
-        <NavLink to="/">
-        <Menu.Item name='all' active={activeItem === 'all'} onClick={this.handleItemClick}>
-          <Label color="black">24</Label>
-          
-          All My Orders
-          
-        </Menu.Item>
-        </NavLink>
-        <NavLink to="/profile">
-        <Menu.Item name='profile' active={activeItem === 'profile'} onClick={this.handleItemClick}>
-          <Icon name="user circle" />
-          
-          My Profile
-          
-        </Menu.Item>
-        </NavLink>
+        </NavLink>)} 
+        {Auth.isAuthenticated() && (
+          <NavLink className='item' to="/current">
+            <Label color="blue">3</Label>
+            Active Orders
+          </NavLink>
+        )}
+        {Auth.isAuthenticated() && (
+          <NavLink className='item' to="/completed">
+            <Label color="olive">22</Label>
+            Delivered Orders
+          </NavLink>)}
+        {Auth.isAuthenticated() && (
+          <NavLink className='item' to="/all">
+            <Label color="black">24</Label>
+            All My Orders
+          </NavLink>
+        )}
+        {Auth.isAuthenticated() && (
+          <NavLink className='item' to="/profile">
+            <Icon name="user circle" />
+            My Profile
+          </NavLink>
+        )}
         {/* <Menu.Item name='payment' active={activeItem === 'payment'} onClick={this.handleItemClick}>
           <Icon name="money" />
           Payment

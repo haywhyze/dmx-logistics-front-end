@@ -8,7 +8,7 @@ const NotFound = () => (
       <Icon name='x' circular />
       <Header.Content>Page Not Found</Header.Content>
     </Header>
-    <NavLink to="/">
+    <NavLink to="/all">
       <Button className='dmx-color'>Go Back to Home Page</Button>
     </NavLink>
     

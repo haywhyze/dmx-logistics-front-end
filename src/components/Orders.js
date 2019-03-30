@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
-import { Icon, Button, Label, Header, Table } from 'semantic-ui-react'
+import { Icon, Button, Label, Header, Message, Table } from 'semantic-ui-react'
 
 const RenderOrderItem = ({ order }) => {
-  console.log(order);
+  
   return (
-    <Table.Row key={order.id}>
+      <>
       <Table.Cell>
         <Label 
           color={ 
@@ -51,36 +51,65 @@ const RenderOrderItem = ({ order }) => {
           </Button>
         </Link>
       </Table.Cell>
-    </Table.Row>
+    </>
   );
 }
 
-const Orders = props => {
-  const order = props.orders.map(order => (
-    <RenderOrderItem order={order} />
-  ));
-  return (
-    <div className='main' style={{ width: '60%', display: 'flex', flexDirection: 'column', marginTop: '1em'}}>
-      <Header as='h3' dividing>
-        All My Orders
-      </Header>
-      <Table celled>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Order Id</Table.HeaderCell>
-            <Table.HeaderCell>Amount</Table.HeaderCell>
-            <Table.HeaderCell>Date Ordered</Table.HeaderCell>
-            <Table.HeaderCell>Status</Table.HeaderCell>
-            <Table.HeaderCell>View Details</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
+class Orders extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = { visibleLog: true }
+  }
+
+  handleDismiss = () => {
+    this.setState({ visibleLog: false })
+    localStorage.setItem('visibleLog', 'false')
+  }
+
+  componentDidMount() {
+    localStorage.visibleLog &&
+    this.setState({
+      visibleLog: false
+    })
+  }
+  
+  render() {
+    const order = this.props.orders.map(order => (
+      <Table.Row key={order.id}>
+        <RenderOrderItem order={order} />
+      </Table.Row>
+    ));
+    return (
+      <div className='main' style={{ width: '60%', display: 'flex', flexDirection: 'column', marginTop: '1em'}}>
+        { this.props.location.state && this.state.visibleLog &&
+          (<Message 
+            color='green' 
+            floating
+            onDismiss={this.handleDismiss}
+            header={this.props.location.state.message} />)
+        }
+        
+        <Header as='h3' dividing>
+          All My Orders
+        </Header>
+        <Table celled>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Order Id</Table.HeaderCell>
+              <Table.HeaderCell>Amount</Table.HeaderCell>
+              <Table.HeaderCell>Date Ordered</Table.HeaderCell>
+              <Table.HeaderCell>Status</Table.HeaderCell>
+              <Table.HeaderCell>View Details</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
           {order}
-        <Table.Body>
-    
-        </Table.Body>
-      </Table>
-    </div>
-  );
+          </Table.Body>
+        </Table>
+      </div>
+    );
+  }
 } 
 
 export default Orders
