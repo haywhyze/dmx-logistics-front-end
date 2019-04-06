@@ -40,7 +40,7 @@ class RecipientDetails extends Component{
         new google.maps.LatLng(6.5244, 3.3792),
         new google.maps.LatLng(9.0765, 7.3986)
       ),
-      fields: ["address_components", "formatted_address", "name"]
+      fields: ["address_components", "formatted_address", "geometry", "name"]
     };
     this.autocomplete = new google.maps.places.Autocomplete(
       document.getElementById("recipientAddress"),
@@ -66,7 +66,11 @@ class RecipientDetails extends Component{
       this.props.updateState({
         recipientState: state['long_name'],
         recipientCountry: country['long_name'],
-        recipientAddress: `${place.name}`
+        recipientAddress: `${place.name}`,
+        destData: {
+          lat: place.geometry.location.lat(),
+          lng: place.geometry.location.lng()
+        }
       })
     }
   };

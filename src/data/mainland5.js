@@ -1,0 +1,18 @@
+export default [
+  { name: 'oshodi-isolo', lat: '6.535498', lng: '3.3086778', region: 'mainland5' },
+  { name: 'isheri', lat: '6.6351156', lng: '3.3603044', region: 'mainland5' },
+  { name: 'ijegun', lat: '6.5164545', lng: '3.2597081', region: 'mainland5' },
+  { name: 'ejigbo', lat: '6.5515802', lng: '3.2935778', region: 'mainland5' },
+  { name: 'ikotun', lat: '6.562564399999999', lng: '3.2432781', region: 'mainland5' },
+  { name: 'okota', lat: '6.5088349', lng: '3.3137121', region: 'mainland5' },
+  { name: 'baruwa', lat: '6.673216399999999', lng: '3.2751898', region: 'mainland5' },
+  { name: 'igando', lat: '6.535889', lng: '3.2483058', region: 'mainland5' },
+  { name: 'isolo', lat: '6.535498', lng: '3.3086778', region: 'mainland5' },
+  { name: 'oke afa isolo', lat: '6.5298354', lng: '3.3120087', region: 'mainland5' },
+  { name: 'iyana ipaja', lat: '6.6053337', lng: '3.2792438', region: 'mainland5' },
+  { name: 'cele egbe', lat: '6.5341304', lng: '3.2789643', region: 'mainland5' },
+  { name: 'ago palace', lat: '6.5001598', lng: '3.3027159', region: 'mainland5' },
+  { name: 'egbeda', lat: '6.5915737', lng: '3.2910616', region: 'mainland5' },
+  { name: 'alimosho', lat: '6.5744462', lng: '3.2569872', region: 'mainland5' },
+  { name: 'jakande oke afa', lat: '6.524732500000001', lng: '3.2973682', region: 'mainland5' },
+];

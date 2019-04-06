@@ -37,7 +37,7 @@ class SenderDetails extends Component{
         new google.maps.LatLng(6.5244, 3.3792),
         new google.maps.LatLng(9.0765, 7.3986)
       ),
-      fields: ["address_components", "formatted_address", "name"]
+      fields: ["address_components", "formatted_address", "geometry", "name"]
     };
     this.autocomplete = new google.maps.places.Autocomplete(
       document.getElementById("senderAddress"),
@@ -65,7 +65,11 @@ class SenderDetails extends Component{
       this.props.updateState({
         senderState: state['long_name'],
         senderCountry: country['long_name'],
-        senderAddress: `${place.name}`
+        senderAddress: `${place.name}`,
+        srcData: {
+          lat: place.geometry.location.lat(),
+          lng: place.geometry.location.lng()
+        }
       })
     }
   };
@@ -77,9 +81,9 @@ class SenderDetails extends Component{
         Sender's Details </Header>
         <Formik 
         initialValues={{
-          senderName:  this.props.values.senderName || '',
-          senderPhone: this.props.values.senderPhone || '',
-          senderEmail: this.props.values.senderEmail || '',
+          senderName:  this.props.values.senderName || `${this.props.user.firstName} ${this.props.user.lastName}` || '',
+          senderPhone: this.props.values.senderPhone || this.props.user.phoneNumber || '',
+          senderEmail: this.props.values.senderEmail || this.props.user.email || '',
         }}
         onSubmit={
           values => {
@@ -115,7 +119,7 @@ class SenderDetails extends Component{
               <div className={ errors.senderAddress && touched.senderAddress ? "field error" : "field" }>
                 <label>Sender's Address
                   <Field 
-                    value={this.props.values.senderAddress} 
+                    value={this.props.user.address || this.props.values.senderAddress} 
                     id="senderAddress" 
                     type="text" 
                     name="senderAddress" 

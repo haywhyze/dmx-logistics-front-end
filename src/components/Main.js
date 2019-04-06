@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter, Switch, Route, Redirect } from 'react-router-dom';
-import { Dimmer, Loader, Segment, Container } from 'semantic-ui-react';
+import { Dimmer, Loader, Segment } from 'semantic-ui-react';
 import axios from 'axios';
 import Header from './Header';
 import Login from './Login';
@@ -24,16 +24,25 @@ class Main extends Component {
     this.state = {
       isLoading: false,
       orders: [],
-      user: {}
+      user: {
+        address: 'hello'
+      }
     }
+  }
+
+  updateState = values => {
+    this.setState({
+        ...values,
+    })
   }
 
   componentDidMount() {
     const token = localStorage.token;
-    const decoded = jwtDecode(token);
-    const userId = decoded.userId;
+    let decoded, userId;
+    if (token) decoded = jwtDecode(token);
+    if (decoded) userId = decoded.userId;
     // fetch user and orders
-    this.setState({
+    if (userId) this.setState({
       isLoading: true,
     })
     const getOrders = () =>
@@ -48,7 +57,7 @@ class Main extends Component {
       url: `http://localhost:5000/api/v1/users/${userId}`
     })
 
-    axios.all([getOrders(), getUserAccount()])
+    if (userId) axios.all([getOrders(), getUserAccount()])
     .then(axios.spread((orders, user) => {
       this.setState({
         isLoading: false,
@@ -92,12 +101,12 @@ class Main extends Component {
           <Switch>
             <Route path="/login" component={Login} />
             <Route path="/register" component={SignUp} />
-            <PrivateRoute exact path="/all" component={() => <Orders {...this.props} user={this.state.user} orders={this.state.orders} />} />
+            <PrivateRoute exact path="/all" onEnter={this.forceUpdate} onChange={this.forceUpdate} component={() => <Orders {...this.props} user={this.state.user} orders={this.state.orders} />} />
             <PrivateRoute exact path="/current" component={() => <Current {...this.props} user={this.state.user} orders={currentOrders} /> } />
             <PrivateRoute exact path="/completed" component={() => <Completed {...this.props} user={this.state.user} orders={completedOrders} /> } />
             <PrivateRoute exact path="/new" component={() => <New {...this.props} user={this.state.user} />} />
             <PrivateRoute path="/orders/:orderId" component={OrderWithId} />
-            <PrivateRoute exact path="/profile" component={() => <Profile {...this.props} user={this.state.user} />} />
+            <PrivateRoute exact path="/profile" component={() => <Profile updateState={this.updateState} {...this.props} user={this.state.user} />} />
             <Route path="/404" component={NotFound} />
             <Redirect to ="/404" />
           </Switch>

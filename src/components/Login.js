@@ -53,7 +53,6 @@ class Login extends Component {
           (values, actions) => {
             axios.post('http://localhost:5000/api/v1/auth/login', values)
               .then(response => {
-                successMess = 'Logged in Successfully';
                 errorMess = undefined;
                 localStorage.setItem('token', response.data.token);
                 this.setState({ redirectToReferrer: true });
@@ -97,12 +96,6 @@ class Login extends Component {
                   error
                   header='Action Forbidden'
                   content={errorMess.error}
-                />
-                )}
-                {successMess && (
-                  <Message
-                  success
-                  header={successMess}
                 />
                 )}
               </div>

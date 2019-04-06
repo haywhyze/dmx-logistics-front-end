@@ -1,18 +1,9 @@
 import React, { Component } from 'react';
-// import {
-//   BrowserRouter as Router,
-//   Route,
-//   Link,
-//   Redirect,
-//   withRouter
-// } from "react-router-dom";
 import { Header, Button, Message } from 'semantic-ui-react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Redirect } from 'react-router-dom';
 import * as Yup from 'yup';
 import axios from 'axios';
-import Auth from '../auth';
-
-console.log(Auth.isAuthenticated());
 
 const phoneRegExp = /^[+]?(\d{0,3})(\d{10})$/
 const valSchema = Yup.object().shape({
@@ -65,10 +56,16 @@ const RadioButton = ({
 };
 
 class SignUp extends Component {
-
+  state = { redirectToReferrer: false };
   render() {
     let errorMess;
     let successMess;
+    let { from } = this.props.location.state || { from: { pathname: "/all" } };
+    let { redirectToReferrer } = this.state;
+    
+    if (redirectToReferrer) {
+      return <Redirect to={{pathname: from.pathname, state: {message: 'Registered successfully'}}} />
+    };
     return(
       <div className='main' 
         style={
@@ -101,11 +98,9 @@ class SignUp extends Component {
           (values, actions) => {
             axios.post('http://localhost:5000/api/v1/auth/signup', values)
               .then(response => {
-                successMess = 'Successfully Registered';
                 errorMess = undefined;
-                console.log(response.data.token);
                 localStorage.setItem('token', response.data.token);
-                window.location = '/'
+                this.setState({ redirectToReferrer: true });
               })
               .catch(error => {
                 console.log(error)

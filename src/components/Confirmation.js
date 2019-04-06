@@ -21,12 +21,14 @@ class Confirmation extends Component{
           senderAddress,
           senderState,
           senderCountry, 
+          srcData,
           recipientName, 
           recipientPhone,
           recipientEmail,
           recipientAddress,
           recipientState,
           recipientCountry,
+          destData,
           paymentStatus,
           weight,
           extraInfo,
@@ -106,6 +108,7 @@ class Confirmation extends Component{
                         <List.Icon name='money bill alternate outline' />
                         <List.Content>PaymentStatus: {paymentStatus}</List.Content>
                     </List.Item>
+                    {console.log(srcData, destData)}
                 </List>
 
                 <Button onClick={this.back}>Back</Button>

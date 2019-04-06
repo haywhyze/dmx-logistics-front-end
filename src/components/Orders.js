@@ -59,7 +59,7 @@ class Orders extends Component {
   constructor(props) {
     super(props)
 
-    this.state = { visibleLog: true }
+    this.state = { visibleLog: true, dataLoaded: false }
   }
 
   handleDismiss = () => {
@@ -73,8 +73,12 @@ class Orders extends Component {
       visibleLog: false
     })
   }
-  
+
   render() {
+    if (!this.state.dataLoaded && !localStorage.dataLoaded) { 
+      localStorage.dataLoaded = 'yes'
+      window.location.reload()
+    }
     const order = this.props.orders.map(order => (
       <Table.Row key={order.id}>
         <RenderOrderItem order={order} />

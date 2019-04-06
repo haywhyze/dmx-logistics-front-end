@@ -62,12 +62,14 @@ class NewOrder extends Component {
             senderAddress,
             senderState,
             senderCountry,
+            srcData,
             recipientName,
             recipientPhone,
             recipientEmail,
             recipientAddress,
             recipientState,
             recipientCountry,
+            destData,
             itemDescription,
             paymentStatus,
             weight,
@@ -80,12 +82,14 @@ class NewOrder extends Component {
             senderAddress,
             senderState,
             senderCountry,
+            srcData,
             recipientName,
             recipientPhone,
             recipientEmail,
             recipientAddress,
             recipientState,
             recipientCountry,
+            destData,
             itemDescription,
             paymentStatus,
             weight,
@@ -98,6 +102,7 @@ class NewOrder extends Component {
                     updateState = {this.updateState}
                     handleChange = {this.handleChange}
                     values={values}
+                    user={this.props.user}
                     />
         case 2:
             return <RecipientDetails 
@@ -106,6 +111,7 @@ class NewOrder extends Component {
                     updateState = {this.updateState}
                     handleChange = {this.handleChange}
                     values={values}
+                    user={this.props.user}
                     />
         case 3:
           return <OrderDetails 
