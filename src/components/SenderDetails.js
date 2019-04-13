@@ -25,6 +25,7 @@ const valSchema = Yup.object().shape({
 class SenderDetails extends Component{
 
   saveAndContinue = values => {
+    !this.props.values.senderCountry && this.handlePlaceSelect();
     this.props.updateState(values)
     this.props.nextStep()
   }
@@ -51,6 +52,35 @@ class SenderDetails extends Component{
   handlePlaceSelect = () => {
     // Extract City From Address Object
     var place = this.autocomplete.getPlace();
+    if (!place) {
+      let geocoder = new google.maps.Geocoder();
+      let address = document.getElementById("senderAddress").value;
+
+      geocoder.geocode({
+        'address': address
+      }, (result, status) => {
+        if (status === 'OK') {
+          place = result[0]
+          const country = place.address_components.find(e => e.types[0] === 'country');
+          const state = place.address_components.find(e => e.types[0] === 'administrative_area_level_1');
+          this.props.updateState({
+            senderState: state['long_name'],
+            senderCountry: country['long_name'],
+            senderAddress: address,
+            srcData: {
+              lat: place.geometry.location.lat(),
+              lng: place.geometry.location.lng()
+            }
+        })
+          
+        } else {
+          alert('Geocode was not successful for the following reason: ' + status);
+        }
+      })
+      console.log()
+      return null;
+    }
+    
     var country = place.address_components.find(function(element) {
       return element.types[0] === "country";
     });
@@ -58,14 +88,13 @@ class SenderDetails extends Component{
       return element.types[0] === "administrative_area_level_1";
     });
 
-    console.log(`${place.name}, ${place.formatted_address}`);
     // Check if address is valid
     if (country && state) {
       // Set State
       this.props.updateState({
         senderState: state['long_name'],
         senderCountry: country['long_name'],
-        senderAddress: `${place.name}`,
+        senderAddress: `${place.formatted_address}`,
         srcData: {
           lat: place.geometry.location.lat(),
           lng: place.geometry.location.lng()
@@ -95,7 +124,7 @@ class SenderDetails extends Component{
         {({ errors, touched }) => {
             return ( <Form className="ui form new">
             <Script
-                  url="https://maps.googleapis.com/maps/api/js?key=AIzaSyBGFjD-GUhv7z3uj8KjNM91c2q0ivWnecg&libraries=places"
+                  url="https://maps.googleapis.com/maps/api/js?key=AIzaSyBGFjD-GUhv7z3uj8KjNM91c2q0ivWnecg&libraries=places,geometry"
                   onLoad={this.handleScriptLoad}
                 />
               <div className={ errors.senderName && touched.senderName ? "field error" : "field" }>
@@ -119,7 +148,7 @@ class SenderDetails extends Component{
               <div className={ errors.senderAddress && touched.senderAddress ? "field error" : "field" }>
                 <label>Sender's Address
                   <Field 
-                    value={this.props.user.address || this.props.values.senderAddress} 
+                    value={this.props.values.senderAddress} 
                     id="senderAddress" 
                     type="text" 
                     name="senderAddress" 

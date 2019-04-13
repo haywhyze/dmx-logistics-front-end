@@ -40,6 +40,7 @@ const determineRegion = data => {
     mainland4,
     mainland5,
   );
+  // eslint-disable-next-line array-callback-return
   allLocation.map(e => {
     const newArr = [];
     newArr.push(computeDistance(data, e));

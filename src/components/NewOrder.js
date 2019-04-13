@@ -7,12 +7,12 @@ import Success from './Success';
 
 class NewOrder extends Component {
     state = {
-        step: 1,
+        step: 4,
 
         senderName: '',
         senderPhone: '',
         senderEmail: '',
-        senderAddress: '',
+        senderAddress: this.props.user.address || '',
         senderState: '',
         senderCountry: '',
         

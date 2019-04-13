@@ -66,7 +66,7 @@ class RecipientDetails extends Component{
       this.props.updateState({
         recipientState: state['long_name'],
         recipientCountry: country['long_name'],
-        recipientAddress: `${place.name}`,
+        recipientAddress: `${place.formatted_address}`,
         destData: {
           lat: place.geometry.location.lat(),
           lng: place.geometry.location.lng()

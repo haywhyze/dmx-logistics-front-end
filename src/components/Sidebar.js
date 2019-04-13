@@ -35,18 +35,15 @@ export default class Sidebar extends Component {
         </NavLink>)} 
         {Auth.isAuthenticated() && (
           <NavLink className='item' to="/current">
-            <Label color="blue">3</Label>
             Active Orders
           </NavLink>
         )}
         {Auth.isAuthenticated() && (
           <NavLink className='item' to="/completed">
-            <Label color="olive">22</Label>
             Delivered Orders
           </NavLink>)}
         {Auth.isAuthenticated() && (
           <NavLink className='item' to="/all">
-            <Label color="black">24</Label>
             All My Orders
           </NavLink>
         )}

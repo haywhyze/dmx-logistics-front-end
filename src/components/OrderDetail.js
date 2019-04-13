@@ -82,6 +82,7 @@ const OrderDetails = (props) => (
       </Grid.Column>
     </Grid.Row>
   </Grid>
+  {console.log(props.order)}
   </div>
 )
 
