@@ -93,7 +93,6 @@ class Orders extends Component {
             onDismiss={this.handleDismiss}
             header={this.props.location.state.message} />)
         }
-        
         <Header as='h3' dividing>
           All My Orders
         </Header>

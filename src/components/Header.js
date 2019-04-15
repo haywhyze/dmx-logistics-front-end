@@ -16,7 +16,7 @@ export default class Header extends Component {
       key: 'user',
       text: (
         <span>
-          Call us on <strong>{this.props.user.phoneNumber}</strong>
+          Call us on <strong>08091234567</strong>
         </span>
       ),
       disabled: true,

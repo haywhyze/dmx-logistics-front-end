@@ -26,7 +26,8 @@ class Main extends Component {
       orders: [],
       user: {
         address: 'hello'
-      }
+      },
+      riders: []
     }
   }
 
@@ -38,13 +39,27 @@ class Main extends Component {
 
   componentDidMount() {
     const token = localStorage.token;
-    let decoded, userId;
+    let decoded, userId, userRole;
     if (token) decoded = jwtDecode(token);
     if (decoded) userId = decoded.userId;
+    if (decoded) userRole = decoded.userRole
     // fetch user and orders
     if (userId) this.setState({
       isLoading: true,
     })
+
+    if (userRole === 'admin') {
+      axios({
+        url:`http://localhost:5000/api/v1/users/${userId}/riders`,
+        headers: {'auth-token': token} 
+      })
+      .then(response => {
+        // console.log(response.data.data)
+        this.setState({
+          riders: response.data.data
+        })
+      })
+    }
     const getOrders = () =>
     axios({
       headers: {'auth-token': token},
@@ -71,7 +86,7 @@ class Main extends Component {
   render() {
     const OrderWithId = ({ match }) => {
       return(
-        <OrderDetails user={this.state.user} order={this.state.orders.filter(order => order.id === Number(match.params.orderId))[0]}/>
+        <OrderDetails user={this.state.user} riders={this.state.riders} order={this.state.orders.filter(order => order.id === Number(match.params.orderId))[0]}/>
       )
     }
     const currentOrders = this.state.orders.filter(order => order.status !== 'delivered' && order.status !== 'cancelled');
