@@ -4,7 +4,7 @@ self.__precacheManifest = [
     "url": "/dmx-logistics-front-end/static/media/brand-icons.e8c322de.woff2"
   },
   {
-    "revision": "660e103a5574f61f979b",
+    "revision": "2209a5ba614c238bf899",
     "url": "/dmx-logistics-front-end/static/css/main.15ceb0f8.chunk.css"
   },
   {
@@ -20,12 +20,12 @@ self.__precacheManifest = [
     "url": "/dmx-logistics-front-end/static/js/2.787a591d.chunk.js"
   },
   {
-    "revision": "cd6c777f1945164224dee082abaea03a",
-    "url": "/dmx-logistics-front-end/static/media/outline-icons.cd6c777f.woff2"
-  },
-  {
     "revision": "ef60a4f6c25ef7f39f2d25a748dbecfe",
     "url": "/dmx-logistics-front-end/static/media/outline-icons.ef60a4f6.woff"
+  },
+  {
+    "revision": "cd6c777f1945164224dee082abaea03a",
+    "url": "/dmx-logistics-front-end/static/media/outline-icons.cd6c777f.woff2"
   },
   {
     "revision": "701ae6abd4719e9c2ada3535a497b341",
@@ -44,8 +44,8 @@ self.__precacheManifest = [
     "url": "/dmx-logistics-front-end/static/media/icons.0ab54153.woff2"
   },
   {
-    "revision": "660e103a5574f61f979b",
-    "url": "/dmx-logistics-front-end/static/js/main.30e24190.chunk.js"
+    "revision": "2209a5ba614c238bf899",
+    "url": "/dmx-logistics-front-end/static/js/main.b828a469.chunk.js"
   },
   {
     "revision": "faff92145777a3cbaf8e7367b4807987",
@@ -56,24 +56,24 @@ self.__precacheManifest = [
     "url": "/dmx-logistics-front-end/static/media/brand-icons.a046592b.woff"
   },
   {
-    "revision": "13db00b7a34fee4d819ab7f9838cc428",
-    "url": "/dmx-logistics-front-end/static/media/brand-icons.13db00b7.eot"
+    "revision": "b87b9ba532ace76ae9f6edfe9f72ded2",
+    "url": "/dmx-logistics-front-end/static/media/icons.b87b9ba5.ttf"
   },
   {
-    "revision": "82f60bd0b94a1ed68b1e6e309ce2e8c3",
-    "url": "/dmx-logistics-front-end/static/media/outline-icons.82f60bd0.svg"
+    "revision": "13db00b7a34fee4d819ab7f9838cc428",
+    "url": "/dmx-logistics-front-end/static/media/brand-icons.13db00b7.eot"
   },
   {
     "revision": "8e3c7f5520f5ae906c6cf6d7f3ddcd19",
     "url": "/dmx-logistics-front-end/static/media/icons.8e3c7f55.eot"
   },
   {
-    "revision": "b87b9ba532ace76ae9f6edfe9f72ded2",
-    "url": "/dmx-logistics-front-end/static/media/icons.b87b9ba5.ttf"
-  },
-  {
     "revision": "c5ebe0b32dc1b5cc449a76c4204d13bb",
     "url": "/dmx-logistics-front-end/static/media/brand-icons.c5ebe0b3.ttf"
+  },
+  {
+    "revision": "82f60bd0b94a1ed68b1e6e309ce2e8c3",
+    "url": "/dmx-logistics-front-end/static/media/outline-icons.82f60bd0.svg"
   },
   {
     "revision": "962a1bf31c081691065fe333d9fa8105",
@@ -84,7 +84,7 @@ self.__precacheManifest = [
     "url": "/dmx-logistics-front-end/static/css/2.bca8b7ab.chunk.css"
   },
   {
-    "revision": "bb5de61ca7efbf95647984dba61c2961",
+    "revision": "a5b6db9185d7db65747f125f61ab509f",
     "url": "/dmx-logistics-front-end/index.html"
   }
 ];
