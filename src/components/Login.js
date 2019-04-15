@@ -28,6 +28,7 @@ class Login extends Component {
     if (redirectToReferrer) {
       return <Redirect to={{pathname: from.pathname, state: {message: 'Logged in Successfully'}}} />
     };
+    localStorage.clear();
     return(
       <div className='main' 
         style={

@@ -9,6 +9,7 @@ import SignUp from './SignUp';
 import Sidebar from './Sidebar';
 import Current from './Current';
 import Completed from './Completed';
+import CreateRider from './CreateRider';
 import New from './New';
 import Orders from './Orders';
 import OrderDetails from './OrderDetail';
@@ -80,7 +81,12 @@ class Main extends Component {
         orders: orders.data.data,
       })
       // console.log(this.state.user, orders.data.data)
-    }))
+    })).catch(error => {
+      console.log(error.response)
+      this.setState({
+        isLoading: false,
+      })
+    })
   }
 
   render() {
@@ -110,7 +116,7 @@ class Main extends Component {
     return(
       <div>
         <Header history={this.props.history} location={this.props.location} user={this.state.user}/>
-        <Sidebar />
+        <Sidebar user={this.state.user}/>
         <TransitionGroup>
           <CSSTransition key={this.props.location.key} classNames="page" timeout={300}>
           <Switch>
@@ -122,6 +128,7 @@ class Main extends Component {
             <PrivateRoute exact path="/new" component={() => <New {...this.props} user={this.state.user} />} />
             <PrivateRoute path="/orders/:orderId" component={OrderWithId} />
             <PrivateRoute exact path="/profile" component={() => <Profile updateState={this.updateState} {...this.props} user={this.state.user} />} />
+            <PrivateRoute exact path="/new-rider" component={CreateRider} />
             <Route path="/404" component={NotFound} />
             <Redirect to ="/404" />
           </Switch>
