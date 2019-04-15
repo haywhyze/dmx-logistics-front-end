@@ -51,7 +51,7 @@ class Main extends Component {
 
     if (userRole === 'admin') {
       axios({
-        url:`http://localhost:5000/api/v1/users/${userId}/riders`,
+        url:`https://dmx-backend.herokuapp.com/api/v1/users/${userId}/riders`,
         headers: {'auth-token': token} 
       })
       .then(response => {
@@ -64,13 +64,13 @@ class Main extends Component {
     const getOrders = () =>
     axios({
       headers: {'auth-token': token},
-      url: `http://localhost:5000/api/v1/orders`
+      url: `https://dmx-backend.herokuapp.com/api/v1/orders`
     })
 
     const getUserAccount = () => 
     axios({
       headers: {'auth-token': token},
-      url: `http://localhost:5000/api/v1/users/${userId}`
+      url: `https://dmx-backend.herokuapp.com/api/v1/users/${userId}`
     })
 
     if (userId) axios.all([getOrders(), getUserAccount()])

@@ -107,7 +107,7 @@ class Profile extends React.Component {
               const { address } = this.state
               axios({
                 method: 'put',
-                url: `http://localhost:5000/api/v1/users/${userId}/profile`,
+                url: `https://dmx-backend.herokuapp.com/api/v1/users/${userId}/profile`,
                 data: {
                   ...values,
                   address

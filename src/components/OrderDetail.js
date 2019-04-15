@@ -48,7 +48,7 @@ class OrderDetails extends React.Component {
     })
 
     Axios({
-      url: `http://localhost:5000/api/v1/orders/${this.props.order.id}/cancel`,
+      url: `https://dmx-backend.herokuapp.com/api/v1/orders/${this.props.order.id}/cancel`,
       method: 'patch',
       headers: {'auth-token': token},
       data: {
@@ -71,7 +71,7 @@ class OrderDetails extends React.Component {
     })
 
     Axios({
-      url: `http://localhost:5000/api/v1/orders/${this.props.order.id}/confirm`,
+      url: `https://dmx-backend.herokuapp.com/api/v1/orders/${this.props.order.id}/confirm`,
       method: 'patch',
       headers: {'auth-token': token},
       data: {
@@ -94,7 +94,7 @@ class OrderDetails extends React.Component {
     })
 
     Axios({
-      url: `http://localhost:5000/api/v1/orders/${this.props.order.id}/complete`,
+      url: `https://dmx-backend.herokuapp.com/api/v1/orders/${this.props.order.id}/complete`,
       method: 'patch',
       headers: {'auth-token': token},
       data: {
@@ -117,7 +117,7 @@ class OrderDetails extends React.Component {
     })
 
     Axios({
-      url: `http://localhost:5000/api/v1/orders/${this.props.order.id}/accept`,
+      url: `https://dmx-backend.herokuapp.com/api/v1/orders/${this.props.order.id}/accept`,
       method: 'patch',
       headers: {'auth-token': token},
       data: {
@@ -140,7 +140,7 @@ class OrderDetails extends React.Component {
     })
 
     Axios({
-      url: `http://localhost:5000/api/v1/orders/${this.props.order.id}/reject`,
+      url: `https://dmx-backend.herokuapp.com/api/v1/orders/${this.props.order.id}/reject`,
       method: 'patch',
       headers: {'auth-token': token},
       data: {
@@ -174,7 +174,7 @@ class OrderDetails extends React.Component {
     })
     
     Axios({
-      url:`http://localhost:5000/api/v1/orders/${this.props.order.id}/price`,
+      url:`https://dmx-backend.herokuapp.com/api/v1/orders/${this.props.order.id}/price`,
       method: 'patch',
       headers: {'auth-token': token},
       data: {
@@ -200,7 +200,7 @@ class OrderDetails extends React.Component {
     })
 
     Axios({
-      url:`http://localhost:5000/api/v1/orders/${this.props.order.id}/assign`,
+      url:`https://dmx-backend.herokuapp.com/api/v1/orders/${this.props.order.id}/assign`,
       method: 'patch',
       headers: {'auth-token': token},
       data: {

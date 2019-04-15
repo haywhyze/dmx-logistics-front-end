@@ -46,7 +46,7 @@ class Confirmation extends Component{
         })
         axios({
           method: 'post',
-          url: 'http://localhost:5000/api/v1/orders',
+          url: 'https://dmx-backend.herokuapp.com/api/v1/orders',
           headers: {'auth-token': token},
           data: values,
         })

@@ -52,7 +52,7 @@ class Login extends Component {
         }}
         onSubmit={
           (values, actions) => {
-            axios.post('http://localhost:5000/api/v1/auth/login', values)
+            axios.post('https://dmx-backend.herokuapp.com/api/v1/auth/login', values)
               .then(response => {
                 errorMess = undefined;
                 localStorage.setItem('token', response.data.token);
