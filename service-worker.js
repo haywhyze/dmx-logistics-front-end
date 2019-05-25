@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/dmx-logistics-front-end/precache-manifest.b41e17d962d819e028906cfde41a5556.js"
+  "/dmx-logistics-front-end/precache-manifest.950f4cf5147925f001fac28ac5bd51ae.js"
 );
 
 workbox.clientsClaim();
