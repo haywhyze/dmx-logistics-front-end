@@ -4,7 +4,7 @@ self.__precacheManifest = [
     "url": "/dmx-logistics-front-end/static/media/icons.faff9214.woff"
   },
   {
-    "revision": "362f092e9b40c9bbd056",
+    "revision": "859532d9917d29e539a1",
     "url": "/dmx-logistics-front-end/static/css/main.15ceb0f8.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = [
     "url": "/dmx-logistics-front-end/static/media/brand-icons.a1a749e8.svg"
   },
   {
-    "revision": "13633ce848e484e370eb",
-    "url": "/dmx-logistics-front-end/static/js/2.817bbd5b.chunk.js"
+    "revision": "0ea4b20a3fd182f69068",
+    "url": "/dmx-logistics-front-end/static/js/2.b975d9e7.chunk.js"
   },
   {
     "revision": "cd6c777f1945164224dee082abaea03a",
@@ -28,12 +28,12 @@ self.__precacheManifest = [
     "url": "/dmx-logistics-front-end/static/media/outline-icons.ef60a4f6.woff"
   },
   {
-    "revision": "ad97afd3337e8cda302d10ff5a4026b8",
-    "url": "/dmx-logistics-front-end/static/media/outline-icons.ad97afd3.ttf"
-  },
-  {
     "revision": "701ae6abd4719e9c2ada3535a497b341",
     "url": "/dmx-logistics-front-end/static/media/outline-icons.701ae6ab.eot"
+  },
+  {
+    "revision": "ad97afd3337e8cda302d10ff5a4026b8",
+    "url": "/dmx-logistics-front-end/static/media/outline-icons.ad97afd3.ttf"
   },
   {
     "revision": "9c74e172f87984c48ddf5c8108cabe67",
@@ -44,8 +44,8 @@ self.__precacheManifest = [
     "url": "/dmx-logistics-front-end/static/media/icons.0ab54153.woff2"
   },
   {
-    "revision": "362f092e9b40c9bbd056",
-    "url": "/dmx-logistics-front-end/static/js/main.c524984c.chunk.js"
+    "revision": "859532d9917d29e539a1",
+    "url": "/dmx-logistics-front-end/static/js/main.8284e85b.chunk.js"
   },
   {
     "revision": "e8c322de9658cbeb8a774b6624167c2c",
@@ -80,11 +80,11 @@ self.__precacheManifest = [
     "url": "/dmx-logistics-front-end/static/media/icons.962a1bf3.svg"
   },
   {
-    "revision": "13633ce848e484e370eb",
+    "revision": "0ea4b20a3fd182f69068",
     "url": "/dmx-logistics-front-end/static/css/2.75c05c74.chunk.css"
   },
   {
-    "revision": "7d8cce6a909dffce2d1ff1efbf2311be",
+    "revision": "ce503ed47ba2743e4ca1a8ff3f917c19",
     "url": "/dmx-logistics-front-end/index.html"
   }
 ];
