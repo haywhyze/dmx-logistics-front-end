@@ -5,6 +5,7 @@ import axios from 'axios';
 
 
 let errorMess;
+let price;
 
 class Confirmation extends Component{
 
@@ -18,20 +19,7 @@ class Confirmation extends Component{
 
     saveAndContinue = (e) => {
         e.preventDefault();
-
-        let price;
-        const {
-          senderState,
-          srcData,
-          destData,
-          recipientState,
-        } = this.props.values;
-
-        if (senderState === 'Lagos' && recipientState === 'Lagos') {
-            price = getPrice(srcData, destData);
-            // console.log(price);
-        }
-
+        console.log(price);
         const { values } = this.props;
         values.price = price;
         delete values.recipientCountry;
@@ -55,7 +43,7 @@ class Confirmation extends Component{
               isSubmitting: false,
             })
             console.log(response)
-            setTimeout(() => this.props.nextStep(), 5000);
+            this.props.nextStep()
           }).catch(error => {
               errorMess = error.response.data.error
                 this.setState({
@@ -94,7 +82,6 @@ class Confirmation extends Component{
          }
         } = this.props;
 
-        let price;
         if (senderState === 'Lagos' && recipientState === 'Lagos')
             price = getPrice(srcData, destData);
 

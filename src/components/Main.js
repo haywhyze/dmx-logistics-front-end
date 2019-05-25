@@ -59,7 +59,7 @@ class Main extends Component {
         this.setState({
           riders: response.data.data
         })
-      })
+      }).catch(error => console.log(error.response))
     }
     const getOrders = () =>
     axios({
@@ -122,6 +122,7 @@ class Main extends Component {
           <Switch>
             <Route path="/login" component={Login} />
             <Route path="/register" component={SignUp} />
+            <PrivateRoute exact path="/" onEnter={this.forceUpdate} onChange={this.forceUpdate} component={() => <Orders {...this.props} user={this.state.user} orders={this.state.orders} />} />
             <PrivateRoute exact path="/all" onEnter={this.forceUpdate} onChange={this.forceUpdate} component={() => <Orders {...this.props} user={this.state.user} orders={this.state.orders} />} />
             <PrivateRoute exact path="/current" component={() => <Current {...this.props} user={this.state.user} orders={currentOrders} /> } />
             <PrivateRoute exact path="/completed" component={() => <Completed {...this.props} user={this.state.user} orders={completedOrders} /> } />

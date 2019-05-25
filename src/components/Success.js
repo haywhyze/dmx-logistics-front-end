@@ -5,6 +5,8 @@ class Success extends Component{
         return(
             <div>
                 <h1 className="ui centered">Details Successfully Saved</h1>
+                {localStorage.dataLoaded = undefined}
+                {window.location.href = '/all'}
             </div>
         )
     }

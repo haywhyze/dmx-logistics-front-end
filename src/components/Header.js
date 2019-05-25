@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Menu, Container, Icon, Image, Dropdown, Item, Button } from 'semantic-ui-react'
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import Auth from '../auth';
 
 export default class Header extends Component {
@@ -21,10 +21,10 @@ export default class Header extends Component {
       ),
       disabled: true,
     },
-    { key: 'profile', text: ( <Item as="a" href="/profile" style={{color: 'black', padding: 0}}>My Profile</Item>) },
-    { key: 'faq', text: ( <Item as="a" href="/faq" style={{color: 'black', padding: 0}}>FAQ</Item>) },
-    { key: 'how-to-pay', text: ( <Item as="a" href="/how-to-pay" style={{color: 'black', padding: 0}}>How to Pay</Item>) },
-    { key: 'contact', text: ( <Item as="a" href="/contact" style={{color: 'black', padding: 0}}>Contact Us</Item>) },
+    { key: 'profile', text: ( <Link as="a" to="/profile" style={{color: 'black', padding: 0}}>My Profile</Link>) },
+    { key: 'faq', text: ( <Link as="a" to="/faq" style={{color: 'black', padding: 0}}>FAQ</Link>) },
+    { key: 'how-to-pay', text: ( <Link as="a" to="/how-to-pay" style={{color: 'black', padding: 0}}>How to Pay</Link>) },
+    { key: 'contact', text: ( <Link as="a" to="/contact" style={{color: 'black', padding: 0}}>Contact Us</Link>) },
     { key: 'number', text: this.props.user.phoneNumber, disabled: true },
     { key: 'sign-out', text: (<Item as='a' style={{color: 'black', padding: 0}} onClick={() => Auth.signout(() => this.props.history.push('/login'))}>Sign Out</Item>) },
   ]
@@ -37,7 +37,7 @@ export default class Header extends Component {
           <Container fluid>
             <NavLink to="/">
               <Menu.Item header>
-                <Image size='tiny' src='/dmx-logo.jpg' style={{ marginRight: '1em' }} />
+                <Image size='tiny' src='./dmx-logo.jpg' style={{ marginRight: '1em' }} />
               </Menu.Item>
             </NavLink>
             
@@ -51,14 +51,14 @@ export default class Header extends Component {
                   {
                     this.props.location.pathname === '/login' &&
                     (<Menu.Item >
-                      <Button as='a' href="/register" color="green">Sign up</Button>
+                      <Link to="/register"> <Button color="green">Sign up</Button></Link>
                     </Menu.Item>)
                   }
                   {
                     this.props.location.pathname === '/register' &&
                     (
                       <Menu.Item>
-                        <Button as='a' href="/login">Log-in</Button>
+                        <Link to="/login"> <Button>Log-in</Button> </Link>
                       </Menu.Item>
                     )
                   }

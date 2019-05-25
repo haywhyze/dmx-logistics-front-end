@@ -404,7 +404,7 @@ class OrderDetails extends React.Component {
                 this.props.order.status === 'delivered' || this.props.order.status === 'cancelled' ?
                 null : 
               (<><Button loading={isSubmittingCancel} secondary onClick={this.showCancel}>Cancel</Button>
-                <Button.Or /></>
+                </>
               )
               }
               {
@@ -416,13 +416,13 @@ class OrderDetails extends React.Component {
                 ?
                 null : 
               (<><Button loading={isSubmittingReject} secondary onClick={this.showReject}>Reject</Button>
-                <Button.Or /></>
+              </>
               )
               }
               {
                 this.props.order.status !== 'processing' ? null :
                 this.props.user.userRole === 'personal' ? null :
-                (<><Button loading={isSubmittingConfirm} positive onClick={this.showConfirm}>Confirm</Button> 
+                (<><Button.Or /><Button loading={isSubmittingConfirm} positive onClick={this.showConfirm}>Confirm</Button> 
                 </>)
               }
               {
@@ -433,7 +433,7 @@ class OrderDetails extends React.Component {
                 this.props.order.status === 'in transit' 
                 ?
                 null :
-                (<><Button loading={isSubmittingAccept} positive onClick={this.showAccept}>Accept</Button> 
+                (<><Button.Or /><Button loading={isSubmittingAccept} positive onClick={this.showAccept}>Accept</Button> 
                 </>)
               }
               {
@@ -442,7 +442,7 @@ class OrderDetails extends React.Component {
                 this.props.order.status === 'processing' ||
                 this.props.order.status === 'cancelled' || 
                 this.props.order.status === 'delivered' ? null :
-                (<Button loading={isSubmittingComplete} primary onClick={this.showComplete}>Delivered</Button>)
+                (<><Button.Or /><Button loading={isSubmittingComplete} primary onClick={this.showComplete}>Delivered</Button></>)
               }
             </Button.Group>
             </Grid.Column>
@@ -503,4 +503,3 @@ class OrderDetails extends React.Component {
   }
 }
 export default OrderDetails;
-    

@@ -59,12 +59,44 @@ class Orders extends Component {
   constructor(props) {
     super(props)
 
-    this.state = { visibleLog: true, dataLoaded: false }
+    this.state = { 
+      visibleLog: true, 
+      dataLoaded: false, 
+      orders: this.props.orders,
+      ordered: {
+        id: false,
+        status: false,
+        date: false,
+        price: false,
+      }
+    }
   }
 
   handleDismiss = () => {
     this.setState({ visibleLog: false })
     localStorage.setItem('visibleLog', 'false')
+  }
+
+  orderBy = (e) => {
+    e.preventDefault();
+    e.persist();
+    let sortAttribute = e.target.dataset.name;
+    if (!this.state.ordered[sortAttribute])
+    this.setState({
+      orders: this.props.orders.sort((a,b) => (a[sortAttribute] > b[sortAttribute] ? -1 : 1)),
+      ordered: {
+        ...this.state.ordered,
+        [sortAttribute] : true,
+      }
+    })
+    else 
+    this.setState({
+      orders: this.props.orders.sort((a,b) => (a[sortAttribute] < b[sortAttribute] ? -1 : 1)),
+      ordered: {
+        ...this.state.ordered,
+        [sortAttribute]: false,
+      }
+    })
   }
 
   componentDidMount() {
@@ -79,7 +111,8 @@ class Orders extends Component {
       localStorage.dataLoaded = 'yes'
       window.location.reload()
     }
-    const order = this.props.orders.map(order => (
+    const orders = this.state.orders
+    const order = orders.map(order => (
       <Table.Row key={order.id}>
         <RenderOrderItem order={order} />
       </Table.Row>
@@ -99,10 +132,10 @@ class Orders extends Component {
         <Table celled>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell>Order Id</Table.HeaderCell>
-              <Table.HeaderCell>Amount</Table.HeaderCell>
-              <Table.HeaderCell>Date Ordered</Table.HeaderCell>
-              <Table.HeaderCell>Status</Table.HeaderCell>
+              <Table.HeaderCell>Order Id <Link style={{ color: '#990000' }} to="#"> <Icon name='sort' data-name='id' onClick={this.orderBy} /></Link></Table.HeaderCell>
+              <Table.HeaderCell>Amount <Link style={{ color: '#990000' }} to="#"> <Icon name='sort' data-name='price' onClick={this.orderBy} /></Link></Table.HeaderCell>
+              <Table.HeaderCell>Date Ordered <Link style={{ color: '#990000' }} to="#"> <Icon name='sort' data-name='createdAt' onClick={this.orderBy} /></Link></Table.HeaderCell>
+              <Table.HeaderCell>Status <Link style={{ color: '#990000' }} to="#"> <Icon name='sort' data-name='status' onClick={this.orderBy} /></Link></Table.HeaderCell>
               <Table.HeaderCell>View Details</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
