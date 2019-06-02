@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, List, Grid, Segment, Label, Message, Icon } from 'semantic-ui-react';
-import getPrice from '../getPrice';
+import getPrice from '../../getPrice';
 import axios from 'axios';
 
 

@@ -30,7 +30,6 @@ export default class Header extends Component {
   ]
   
   render() {
-    console.log()
     return (
       <>
         <Menu fixed='top' inverted>
