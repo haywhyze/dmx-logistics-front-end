@@ -81,22 +81,43 @@ class Orders extends Component {
     e.preventDefault();
     e.persist();
     let sortAttribute = e.target.dataset.name;
-    if (!this.state.ordered[sortAttribute])
-    this.setState({
-      orders: this.props.orders.sort((a,b) => (a[sortAttribute] > b[sortAttribute] ? -1 : 1)),
-      ordered: {
-        ...this.state.ordered,
-        [sortAttribute] : true,
-      }
-    })
-    else 
-    this.setState({
-      orders: this.props.orders.sort((a,b) => (a[sortAttribute] < b[sortAttribute] ? -1 : 1)),
-      ordered: {
-        ...this.state.ordered,
-        [sortAttribute]: false,
-      }
-    })
+    if (!this.state.ordered[sortAttribute]) {
+      if (sortAttribute === 'price') 
+      this.setState({
+        orders: this.props.orders.sort((a,b) => (Number(a[sortAttribute]) > Number(b[sortAttribute]) ? -1 : 1)),
+        ordered: {
+          ...this.state.ordered,
+          [sortAttribute] : true,
+        }
+      })
+      else
+      this.setState({
+        orders: this.props.orders.sort((a,b) => (a[sortAttribute] > b[sortAttribute] ? -1 : 1)),
+        ordered: {
+          ...this.state.ordered,
+          [sortAttribute] : true,
+        }
+      })
+    }
+    else {
+      if (sortAttribute === 'price') 
+      this.setState({
+        orders: this.props.orders.sort((a,b) => (Number(a[sortAttribute]) < Number(b[sortAttribute]) ? -1 : 1)),
+        ordered: {
+          ...this.state.ordered,
+          [sortAttribute]: false,
+        }
+      })
+      else 
+      this.setState({
+        orders: this.props.orders.sort((a,b) => (a[sortAttribute] < b[sortAttribute] ? -1 : 1)),
+        ordered: {
+          ...this.state.ordered,
+          [sortAttribute]: false,
+        }
+      })
+    } 
+    
   }
 
   componentDidMount() {
