@@ -36,7 +36,7 @@ export default class Header extends Component {
           <Container fluid>
             <NavLink to="/">
               <Menu.Item header>
-                <Image size='tiny' src='./dmx-logo.jpg' style={{ marginRight: '1em' }} />
+                <Image size='tiny' src='https://dmx-backend.herokuapp.com/dmx-logo.jpg' style={{ marginRight: '1em' }} />
               </Menu.Item>
             </NavLink>
             

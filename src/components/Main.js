@@ -34,7 +34,9 @@ class Main extends Component {
         status: false,
         date: false,
         price: false,
-      }
+      },
+      activePage: 1,
+      totalPages: 1,
     }
   }
 
@@ -86,6 +88,26 @@ class Main extends Component {
     }
   }
 
+  handlePaginationChange = (activePage) => {
+    this.setState({
+      isLoading: true,
+    })
+    const token = localStorage.token;
+    const getOrders = () =>
+    axios({
+      headers: {'auth-token': token},
+      url: `https://dmx-backend.herokuapp.com/api/v1/orders?page=${activePage}`
+    });
+    getOrders().then(response => {
+      this.setState({
+        isLoading: false,
+        orders: response.data.data.rows.sort((a,b) => (a.id > b.id ? -1 : 1)),
+        activePage,
+        totalPages: response.data.data.count,
+      })
+      }).catch(error => console.log(error.response))
+  }
+
   componentDidMount() {
     const token = localStorage.token;
     let decoded, userId, userRole;
@@ -111,7 +133,7 @@ class Main extends Component {
     const getOrders = () =>
     axios({
       headers: {'auth-token': token},
-      url: `https://dmx-backend.herokuapp.com/api/v1/orders`
+      url: `https://dmx-backend.herokuapp.com/api/v1/orders?page=${this.state.activePage}`
     })
 
     const getUserAccount = () => 
@@ -125,7 +147,8 @@ class Main extends Component {
       this.setState({
         isLoading: false,
         user: user.data.data,
-        orders: orders.data.data,
+        orders: orders.data.data.rows.sort((a,b) => (a.id > b.id ? -1 : 1)),
+        totalPages: orders.data.data.count,
       })
     })).catch(error => {
       console.log(error.response)
@@ -196,6 +219,10 @@ class Main extends Component {
                 user={this.state.user} 
                 orders={this.state.orders}
                 orderBy={this.orderBy}
+                updateState={this.updateState} {...this.props} 
+                count={this.state.totalPages}
+                handlePaginationChange={this.handlePaginationChange}
+                activePage={this.state.activePage}
               />} 
             />
             <PrivateRoute 
@@ -204,6 +231,10 @@ class Main extends Component {
                 user={this.state.user} 
                 orders={this.state.orders}
                 orderBy={this.orderBy}
+                updateState={this.updateState} {...this.props} 
+                count={this.state.totalPages}
+                handlePaginationChange={this.handlePaginationChange}
+                activePage={this.state.activePage}
               />} 
             />
             <PrivateRoute 

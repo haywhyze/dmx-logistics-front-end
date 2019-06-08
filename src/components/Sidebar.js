@@ -75,7 +75,9 @@ export default class Sidebar extends Component {
       </Menu>
       
       </Collapse>
+        {Auth.isAuthenticated() && (userRole === 'admin') && (
        <Icon id="mobile-menu" name="bars" size="big" onClick={this.toggleNav} />
+        )}
       
       </div>
     )

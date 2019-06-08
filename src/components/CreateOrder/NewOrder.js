@@ -7,7 +7,7 @@ import Success from './Success';
 
 class NewOrder extends Component {
     state = {
-        step: 1,
+        step: 5,
 
         senderName: '',
         senderPhone: '',
@@ -125,6 +125,7 @@ class NewOrder extends Component {
                     nextStep={this.nextStep}
                     prevStep={this.prevStep}
                     values={values}
+                    location={this.props.location}
                     />
         case 5:
             return <Success />

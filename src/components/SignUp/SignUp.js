@@ -145,7 +145,7 @@ class SignUp extends Component {
               </div>
             </div>
             <div className="two fields">
-            <div className={ errors.firstName && touched.firstName ? "field error" : "field" }>
+              <div className={ errors.firstName && touched.firstName ? "field error" : "field" }>
                 <label>First Name
                   <Field type="text" name="firstName" placeholder="Olawale" />
                   <ErrorMessage name="firstName" component="div" />
