@@ -243,6 +243,11 @@ class OrderDetails extends React.Component {
       value: rider.id,
     }))
 
+    Number.prototype.format = function(n, x) {
+      var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+      return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+    };
+
     return(
       <>
         { this.props.order && <div className='main' style={{ width: '60%', display: 'flex', flexDirection: 'column', marginTop: '1em'}}>
@@ -254,30 +259,30 @@ class OrderDetails extends React.Component {
           />
         <Grid stackable columns={3}>
             <Grid.Column>
-            Item Description
-            <Segment color='black'>{this.props.order.itemDescription}</Segment>
+              <h3>Item Description</h3>
+              <Segment color='black'>{this.props.order.itemDescription}</Segment>
             </Grid.Column>
             <Grid.Column>
-            Status
-            <Segment 
-              textAlign='center' 
-              color={ 
-                this.props.order.status === 'processing' ? 
-                  "blue" : 
-                this.props.order.status === 'confirmed' ? 
-                  "orange" :
-                this.props.order.status === 'in transit' ?
-                  "teal" :
-                this.props.order.status === 'delivered' ?
-                  "green" : "black" 
-                } 
-              inverted>
-                {_.capitalize(this.props.order.status)}
-            </Segment>
+              <h3>Status</h3>
+              <Segment 
+                textAlign='center' 
+                color={ 
+                  this.props.order.status === 'processing' ? 
+                    "blue" : 
+                  this.props.order.status === 'confirmed' ? 
+                    "orange" :
+                  this.props.order.status === 'in transit' ?
+                    "teal" :
+                  this.props.order.status === 'delivered' ?
+                    "green" : "black" 
+                  } 
+                inverted>
+                  {_.capitalize(this.props.order.status)}
+              </Segment>
             </Grid.Column>
             <Grid.Column>
-              Date Ordered
-            <Segment textAlign='right'>{new Date(this.props.order.createdAt).toDateString()}</Segment>
+                <h3>Date Ordered</h3>
+              <Segment textAlign='right'>{new Date(this.props.order.createdAt).toDateString()}</Segment>
             </Grid.Column>
             {
               this.props.user.userRole !== 'admin' ? null :
@@ -315,11 +320,10 @@ class OrderDetails extends React.Component {
               <Grid.Column textAlign='center' width={8}>
                 <Segment textAlign='center' className='dmx-color' inverted>
                   <Statistic size='tiny' className='dmx-color' inverted>
-                    <Statistic.Value>&#8358;{this.props.order.price}</Statistic.Value>
+                    <Statistic.Value>&#8358;{Number(this.props.order.price).format(2)}</Statistic.Value>
                     <Statistic.Label>Price</Statistic.Label>
                   </Statistic>
                 </Segment>
-                
               </Grid.Column>  
             )  
           }

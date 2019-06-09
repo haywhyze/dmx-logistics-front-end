@@ -54,11 +54,6 @@ class Profile extends React.Component {
   handlePlaceSelect = () => {
     // Extract City From Address Object
     var place = this.autocomplete.getPlace();
-    let location = {
-      lat: place.geometry.location.lat(),
-      lng: place.geometry.location.lng()
-    }
-    console.log(location);
     // Set State
       this.setState({
         address: `${place.formatted_address}`
@@ -119,9 +114,6 @@ class Profile extends React.Component {
                 this.props.updateState({
                   user: response.data.data,
                 })
-                setTimeout(() => {
-                  window.location.reload()
-                }, 3000)
                 
               })
               .catch(error => {

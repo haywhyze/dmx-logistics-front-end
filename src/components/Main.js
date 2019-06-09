@@ -214,19 +214,7 @@ class Main extends Component {
               component={SignUp} 
             />
             <PrivateRoute 
-              exact path="/"
-              component={() => <Orders {...this.props} 
-                user={this.state.user} 
-                orders={this.state.orders}
-                orderBy={this.orderBy}
-                updateState={this.updateState} {...this.props} 
-                count={this.state.totalPages}
-                handlePaginationChange={this.handlePaginationChange}
-                activePage={this.state.activePage}
-              />} 
-            />
-            <PrivateRoute 
-              exact path="/all"
+              exact path={['/','/all']}
               component={() => <Orders {...this.props} 
                 user={this.state.user} 
                 orders={this.state.orders}

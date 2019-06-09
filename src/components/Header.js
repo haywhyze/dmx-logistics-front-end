@@ -7,11 +7,16 @@ export default class Header extends Component {
   
  trigger = (
     <span>
-      <Icon name='user' /> Hello, {this.props.user.firstName}
+      <Icon name='user' /> 
+      {this.props.user.userRole === 'business' ? 
+        this.props.user.businessName : 
+        `Hello, ${this.props.user.firstName}`
+      }
     </span>
   )
   
- options = [
+  render() {
+    const options = [
     {
       key: 'user',
       text: (
@@ -28,8 +33,7 @@ export default class Header extends Component {
     { key: 'number', text: this.props.user.phoneNumber, disabled: true },
     { key: 'sign-out', text: (<Item as='a' style={{color: 'black', padding: 0}} onClick={() => Auth.signout(() => this.props.history.push('/login'))}>Sign Out</Item>) },
   ]
-  
-  render() {
+
     return (
       <>
         <Menu fixed='top' inverted>
@@ -43,7 +47,7 @@ export default class Header extends Component {
             <Menu.Menu position="right">
             { Auth.isAuthenticated() ? 
               (
-                <Dropdown item trigger={this.trigger} options={this.options}/>
+                <Dropdown item trigger={this.trigger} options={options}/>
               )
               : (
                 <>
