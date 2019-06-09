@@ -7,7 +7,7 @@ import Success from './Success';
 
 class NewOrder extends Component {
     state = {
-        step: 5,
+        step: 1,
 
         senderName: '',
         senderPhone: '',
