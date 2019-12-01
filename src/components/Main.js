@@ -17,6 +17,8 @@ import Profile from './Profile/Profile';
 import jwtDecode from 'jwt-decode';
 import PrivateRoute from './PrivateRoute'
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import baseUrl from '../api/baseUrl';
+
 class Main extends Component {
   
   constructor(props) {
@@ -96,7 +98,7 @@ class Main extends Component {
     const getOrders = () =>
     axios({
       headers: {'auth-token': token},
-      url: `https://dmx-backend.herokuapp.com/api/v1/orders?page=${activePage}`
+      url: `${baseUrl}/api/v1/orders?page=${activePage}`
     });
     getOrders().then(response => {
       this.setState({
@@ -121,7 +123,7 @@ class Main extends Component {
 
     if (userRole === 'admin') {
       axios({
-        url:`https://dmx-backend.herokuapp.com/api/v1/users/${userId}/riders`,
+        url:`${baseUrl}/api/v1/users/${userId}/riders`,
         headers: {'auth-token': token} 
       })
       .then(response => {
@@ -133,13 +135,13 @@ class Main extends Component {
     const getOrders = () =>
     axios({
       headers: {'auth-token': token},
-      url: `https://dmx-backend.herokuapp.com/api/v1/orders?page=${this.state.activePage}`
+      url: `${baseUrl}/api/v1/orders?page=${this.state.activePage}`
     })
 
     const getUserAccount = () => 
     axios({
       headers: {'auth-token': token},
-      url: `https://dmx-backend.herokuapp.com/api/v1/users/${userId}`
+      url: `${baseUrl}/api/v1/users/${userId}`
     })
 
     if (userId) axios.all([getOrders(), getUserAccount()])

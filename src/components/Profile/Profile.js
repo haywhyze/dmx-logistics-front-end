@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import Script from "react-load-script";
 import jwtDecode from 'jwt-decode';
+import baseUrl from '../../api/baseUrl';
 
 const phoneRegExp = /^[+]?(\d{0,3})(\d{10})$/
 const valSchema = Yup.object().shape({
@@ -102,7 +103,7 @@ class Profile extends React.Component {
               const { address } = this.state
               axios({
                 method: 'put',
-                url: `https://dmx-backend.herokuapp.com/api/v1/users/${userId}/profile`,
+                url: `${baseUrl}/api/v1/users/${userId}/profile`,
                 data: {
                   ...values,
                   address

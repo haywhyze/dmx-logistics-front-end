@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Menu, Container, Icon, Image, Dropdown, Item, Button } from 'semantic-ui-react'
 import { NavLink, Link } from 'react-router-dom';
 import Auth from '../auth';
+import baseUrl from '../api/baseUrl';
 
 export default class Header extends Component {
   
@@ -40,7 +41,7 @@ export default class Header extends Component {
           <Container fluid>
             <NavLink to="/">
               <Menu.Item header>
-                <Image size='tiny' src='https://dmx-backend.herokuapp.com/dmx-logo.jpg' style={{ marginRight: '1em' }} />
+                <Image size='tiny' src={`${baseUrl}/dmx-logo.jpg`} style={{ marginRight: '1em' }} />
               </Menu.Item>
             </NavLink>
             

@@ -5,6 +5,7 @@ import getPrice from '../../getPrice';
 import axios from 'axios';
 import GridSegment from './GridSegment';
 import ListItem from './ListItem';
+import baseUrl from '../../api/baseUrl';
 
 let errorMess;
 let price;
@@ -35,7 +36,7 @@ class Confirmation extends Component{
     })
     axios({
       method: 'post',
-      url: 'https://dmx-backend.herokuapp.com/api/v1/orders',
+      url: `${baseUrl}/api/v1/orders`,
       headers: {'auth-token': token},
       data: values,
     })

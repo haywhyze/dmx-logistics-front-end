@@ -4,6 +4,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { Redirect } from 'react-router-dom';
 import * as Yup from 'yup';
 import axios from 'axios';
+import baseUrl from '../../api/baseUrl';
 
 const valSchema = Yup.object().shape({
   email: Yup.string()
@@ -52,7 +53,7 @@ class Login extends Component {
         }}
         onSubmit={
           (values, actions) => {
-            axios.post('https://dmx-backend.herokuapp.com/api/v1/auth/login', values)
+            axios.post(`${baseUrl}/api/v1/auth/login`, values)
               .then(response => {
                 errorMess = undefined;
                 localStorage.setItem('token', response.data.token);
