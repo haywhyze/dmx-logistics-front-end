@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { withRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { Dimmer, Loader, Segment } from 'semantic-ui-react';
 import axios from 'axios';
@@ -19,81 +19,42 @@ import PrivateRoute from './PrivateRoute'
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import baseUrl from '../api/baseUrl';
 
-class Main extends Component {
-  
-  constructor(props) {
-    super(props)
 
-    this.state = {
-      isLoading: false,
-      orders: [],
-      user: {
-        address: 'hello'
-      },
-      riders: [],
-      ordered: {
-        id: false,
-        status: false,
-        date: false,
-        price: false,
-      },
-      activePage: 1,
-      totalPages: 1,
-    }
-  }
+function Main(props) {
+  const [isLoading, setLoading] = useState(false);
+  const [orders, setOrders] = useState([]);
+  const [user, setUser] = useState({});
+  const [riders, setRiders] = useState([]);
+  const [ordered, setOrdered] = useState({id: false, status: false, date: false, price: false});
+  const [activePage, setActivePage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  updateState = values => {
-    this.setState({
-        ...values,
-    })
-  }
-
-  orderBy = (e, orders) => {
+  const orderBy = (e, orders) => {
     e.preventDefault();
     e.persist();
     let sortAttribute = e.target.dataset.name;
-    if (!this.state.ordered[sortAttribute]) {
-      if (sortAttribute === 'price') 
-      this.setState({
-        orders: orders.sort((a,b) => (Number(a[sortAttribute]) > Number(b[sortAttribute]) ? -1 : 1)),
-        ordered: {
-          ...this.state.ordered,
-          [sortAttribute] : true,
-        }
-      })
-      else
-      this.setState({
-        orders: orders.sort((a,b) => (a[sortAttribute] > b[sortAttribute] ? -1 : 1)),
-        ordered: {
-          ...this.state.ordered,
-          [sortAttribute] : true,
-        }
-      })
+    if (!ordered[sortAttribute]) {
+      if (sortAttribute === 'price') {
+        setOrders(orders.sort((a,b) => (Number(a[sortAttribute]) > Number(b[sortAttribute]) ? -1 : 1)))
+        setOrdered({...ordered, [sortAttribute]: true})
+      } else {
+        setOrders(orders.sort((a,b) => (a[sortAttribute] > b[sortAttribute] ? -1 : 1)))
+        setOrdered({...ordered, [sortAttribute]: true})
+      }
     }
     else {
-      if (sortAttribute === 'price') 
-      this.setState({
-        orders: orders.sort((a,b) => (Number(a[sortAttribute]) < Number(b[sortAttribute]) ? -1 : 1)),
-        ordered: {
-          ...this.state.ordered,
-          [sortAttribute]: false,
-        }
-      })
-      else 
-      this.setState({
-        orders: orders.sort((a,b) => (a[sortAttribute] < b[sortAttribute] ? -1 : 1)),
-        ordered: {
-          ...this.state.ordered,
-          [sortAttribute]: false,
-        }
-      })
+      if (sortAttribute === 'price') {
+        setOrders(orders.sort((a,b) => (Number(a[sortAttribute]) < Number(b[sortAttribute]) ? -1 : 1)))
+        setOrdered({...ordered, [sortAttribute]: false})
+      } else {
+        setOrders(orders.sort((a,b) => (a[sortAttribute] < b[sortAttribute] ? -1 : 1)))
+        setOrdered({...ordered, [sortAttribute]: false})
+      }
     }
   }
 
-  handlePaginationChange = (activePage) => {
-    this.setState({
-      isLoading: true,
-    })
+  const handlePaginationChange = (activePage) => {
+    setLoading(true);
     const token = localStorage.token;
     const getOrders = () =>
     axios({
@@ -101,25 +62,25 @@ class Main extends Component {
       url: `${baseUrl}/api/v1/orders?page=${activePage}`
     });
     getOrders().then(response => {
-      this.setState({
-        isLoading: false,
-        orders: response.data.data.rows.sort((a,b) => (a.id > b.id ? -1 : 1)),
-        activePage,
-        totalPages: response.data.data.count,
-      })
+      setLoading(false);
+      setOrders(response.data.data.rows.sort((a,b) => (a.id > b.id ? -1 : 1)))
+      setActivePage(activePage);
+      setTotalPages(response.data.data.count);
       }).catch(error => console.log(error.response))
   }
 
-  componentDidMount() {
+  const updateState = values => {
+    console.log(values);
+  }
+
+  useEffect(() => {
     const token = localStorage.token;
     let decoded, userId, userRole;
     if (token) decoded = jwtDecode(token);
     if (decoded) userId = decoded.userId;
     if (decoded) userRole = decoded.userRole
     // fetch user and orders
-    if (userId) this.setState({
-      isLoading: true,
-    })
+    if (userId) setLoading(true);
 
     if (userRole === 'admin') {
       axios({
@@ -127,15 +88,13 @@ class Main extends Component {
         headers: {'auth-token': token} 
       })
       .then(response => {
-        this.setState({
-          riders: response.data.data
-        })
+        setRiders(response.data.data)
       }).catch(error => console.log(error.response))
     }
     const getOrders = () =>
     axios({
       headers: {'auth-token': token},
-      url: `${baseUrl}/api/v1/orders?page=${this.state.activePage}`
+      url: `${baseUrl}/api/v1/orders?page=${activePage}`
     })
 
     const getUserAccount = () => 
@@ -146,135 +105,130 @@ class Main extends Component {
 
     if (userId) axios.all([getOrders(), getUserAccount()])
     .then(axios.spread((orders, user) => {
-      this.setState({
-        isLoading: false,
-        user: user.data.data,
-        orders: orders.data.data.rows.sort((a,b) => (a.id > b.id ? -1 : 1)),
-        totalPages: orders.data.data.count,
-      })
+      setLoading(false);
+      setUser(user.data.data);
+      setOrders(orders.data.data.rows.sort((a,b) => (a.id > b.id ? -1 : 1)))
+      setTotalPages(orders.data.data.count)
     })).catch(error => {
       console.log(error.response)
-      this.setState({
-        isLoading: false,
-      })
+      setLoading(false)
     })
-  }
+  }, []);
 
-  render() {
-    const OrderWithId = ({ match }) => {
-      return(
-        <OrderDetails 
-          user={this.state.user} 
-          riders={this.state.riders} 
-          order={this.state.orders.filter(order => order.id === Number(match.params.orderId))[0]}/>
-      )
-    }
-    const currentOrders = this.state.orders.filter(order => order.status !== 'delivered' && order.status !== 'cancelled');
-    const completedOrders = this.state.orders.filter(order => order.status === 'delivered');
-    
-    if (this.state.isLoading) {
-      return(
-        <>
-        <Dimmer.Dimmable style={{minHeight: '100vh'}} as={Segment} dimmed>
-          <Dimmer active inverted>
-            <Loader>Loading</Loader>
-          </Dimmer>
-          <Header 
-            history={this.props.history} 
-            location={this.props.location} 
-            user={this.state.user}
-          />
-        <Sidebar />
-        </Dimmer.Dimmable>
-        
-        </>
-      )
-    }
-    else
+  const OrderWithId = ({ match }) => {
     return(
-      <div>
-        <Header 
-          history={this.props.history} 
-          location={this.props.location} 
-          user={this.state.user}/>
-        <Sidebar 
-          user={this.state.user}
-        />
-        <TransitionGroup>
-          <CSSTransition 
-            key={this.props.location.key} 
-            classNames="page" 
-            timeout={300}
-          >
-          <Switch>
-            <Route 
-              path="/login" 
-              component={Login} 
-            />
-            <Route 
-              path="/register" 
-              component={SignUp} 
-            />
-            <PrivateRoute 
-              exact path={['/','/all']}
-              component={() => <Orders {...this.props} 
-                user={this.state.user} 
-                orders={this.state.orders}
-                orderBy={this.orderBy}
-                updateState={this.updateState} {...this.props} 
-                count={this.state.totalPages}
-                handlePaginationChange={this.handlePaginationChange}
-                activePage={this.state.activePage}
-              />} 
-            />
-            <PrivateRoute 
-              exact path="/current" 
-              component={() => <Current {...this.props} 
-                user={this.state.user} 
-                orders={currentOrders}
-                orderBy={this.orderBy}
-              /> } 
-            />
-            <PrivateRoute 
-              exact path="/completed" 
-              component={() => <Completed {...this.props} 
-                user={this.state.user} 
-                orders={completedOrders}
-                orderBy={this.orderBy}
-              /> } 
-            />
-            <PrivateRoute 
-              exact path="/new" 
-              component={() => <New {...this.props} 
-                user={this.state.user} />} 
-              />
-            <PrivateRoute 
-              path="/orders/:orderId" 
-              component={OrderWithId} />
-            <PrivateRoute 
-              exact path="/profile" 
-              component={() => <Profile 
-                updateState={this.updateState} {...this.props} 
-                user={this.state.user} 
-              />} 
-            />
-            <PrivateRoute 
-              exact path="/new-rider" 
-              component={CreateRider} 
-            />
-            <Route 
-              path="/404" 
-              component={NotFound} 
-            />
-            <Redirect 
-              to ="/404" 
-            />
-          </Switch>
-          </CSSTransition>
-        </TransitionGroup>
-      </div>
-      );
+      <OrderDetails 
+        user={user} 
+        riders={riders} 
+        order={orders.filter(order => order.id === Number(match.params.orderId))[0]}/>
+    )
   }
+  const currentOrders = orders.filter(order => order.status !== 'delivered' && order.status !== 'cancelled');
+  const completedOrders = orders.filter(order => order.status === 'delivered');
+  
+  if (isLoading) {
+    return(
+      <>
+      <Dimmer.Dimmable style={{minHeight: '100vh'}} as={Segment} dimmed>
+        <Dimmer active inverted>
+          <Loader>Loading</Loader>
+        </Dimmer>
+        <Header 
+          history={props.history} 
+          location={props.location} 
+          user={user}
+        />
+      <Sidebar />
+      </Dimmer.Dimmable>
+      
+      </>
+    )
+  }
+  else
+  return(
+    <div>
+      <Header 
+        history={props.history} 
+        location={props.location} 
+        user={user}/>
+      <Sidebar 
+        user={user}
+      />
+      <TransitionGroup>
+        <CSSTransition 
+          key={props.location.key} 
+          classNames="page" 
+          timeout={300}
+        >
+        <Switch>
+          <Route 
+            path="/login" 
+            component={Login} 
+          />
+          <Route 
+            path="/register" 
+            component={SignUp} 
+          />
+          <PrivateRoute 
+            exact path={['/','/all']}
+            component={() => <Orders {...props} 
+              user={user} 
+              orders={orders}
+              orderBy={orderBy}
+              updateState={updateState} {...props} 
+              count={totalPages}
+              handlePaginationChange={handlePaginationChange}
+              activePage={activePage}
+            />} 
+          />
+          <PrivateRoute 
+            exact path="/current" 
+            component={() => <Current {...props} 
+              user={user} 
+              orders={currentOrders}
+              orderBy={orderBy}
+            /> } 
+          />
+          <PrivateRoute 
+            exact path="/completed" 
+            component={() => <Completed {...props} 
+              user={user} 
+              orders={completedOrders}
+              orderBy={orderBy}
+            /> } 
+          />
+          <PrivateRoute 
+            exact path="/new" 
+            component={() => <New {...props} 
+              user={user} />} 
+            />
+          <PrivateRoute 
+            path="/orders/:orderId" 
+            component={OrderWithId} />
+          <PrivateRoute 
+            exact path="/profile" 
+            component={() => <Profile 
+              updateState={updateState} {...props} 
+              user={user} 
+            />} 
+          />
+          <PrivateRoute 
+            exact path="/new-rider" 
+            component={CreateRider} 
+          />
+          <Route 
+            path="/404" 
+            component={NotFound} 
+          />
+          <Redirect 
+            to ="/404" 
+          />
+        </Switch>
+        </CSSTransition>
+      </TransitionGroup>
+    </div>
+    );
+
 }
 
 export default withRouter(Main);
