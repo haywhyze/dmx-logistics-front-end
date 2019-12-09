@@ -1,36 +1,21 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import { Label, Icon, Menu } from 'semantic-ui-react'
 import { Collapse } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 import Auth from '../auth';
 import jwtDecode from 'jwt-decode';
 
-export default class Sidebar extends Component {
+export default function Sidebar(props) {
+  const [isNavOpen, toggleNav] = useState(false);
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      isNavOpen: false,
-    }
-    this.toggleNav = this.toggleNav.bind(this);
-  }
-
-  toggleNav() {
-    this.setState({
-      isNavOpen: !this.state.isNavOpen
-    })
-    console.log(this.state.isNavOpen)
-  }
-
-  render() {
-    const token = localStorage.token;
+  const token = localStorage.token;
     let decoded, userRole;
     if (token) decoded = jwtDecode(token);
     if (decoded) userRole = decoded.userRole
     
     return (
       <div fixed="top" style={{ paddingTop: '3.8em' }}>
-      <Collapse id="sidebar" isOpen={this.state.isNavOpen} >
+      <Collapse id="sidebar" isOpen={isNavOpen} >
       
       <Menu vertical inverted className=' sidebar-menu dmx-color'>
         {Auth.isAuthenticated() && (userRole !== 'rider' && userRole !== 'admin') && (
@@ -75,11 +60,11 @@ export default class Sidebar extends Component {
       </Menu>
       
       </Collapse>
-        {Auth.isAuthenticated() && (userRole === 'admin') && (
-       <Icon id="mobile-menu" name="bars" size="big" onClick={this.toggleNav} />
+        {Auth.isAuthenticated() && (
+       <Icon id="mobile-menu" name="bars" size="big" onClick={() => toggleNav(!isNavOpen)} />
         )}
       
       </div>
     )
-  }
+
 }
