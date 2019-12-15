@@ -1,78 +1,74 @@
-import React, { Component } from 'react'
-import { Grid, Message, Pagination } from 'semantic-ui-react';
-import OrderTableHeading from './OrderTableHeading';
+import React, { useState, useEffect } from "react";
+import { Grid, Message, Pagination } from "semantic-ui-react";
+import OrderTableHeading from "./OrderTableHeading";
 
-class Orders extends Component {
-  constructor(props) {
-    super(props)
+function Orders(props) {
+  const [visibleLog, setVisibleLog] = useState(true);
+  const [dataLoaded] = useState(false);
+  const [activePage, setActivePage] = useState(props.activePage);
+  const [boundaryRange] = useState(1);
+  const [siblingRange] = useState(1);
+  const [showEllipsis] = useState(true);
+  const [showFirstAndLastNav] = useState(true);
+  const [showPreviousAndNextNav] = useState(true);
+  const [totalPages] = useState(Math.ceil(props.count / 10));
 
-    this.state = { 
-      visibleLog: true, 
-      dataLoaded: false,
-      activePage: this.props.activePage,
-      boundaryRange: 1,
-      siblingRange: 1,
-      showEllipsis: true,
-      showFirstAndLastNav: true,
-      showPreviousAndNextNav: true,
-      totalPages: Math.ceil(this.props.count/10),
-    }
+  const handlePaginationChange = (e, { activePage }) => {
+    setActivePage(activePage);
+    props.updateState({
+      activePage
+    });
+    props.handlePaginationChange(activePage);
+  };
+
+  const handleDismiss = () => {
+    setVisibleLog(false);
+    localStorage.setItem("visibleLog", "false");
+  };
+
+  useEffect(() => {
+    localStorage.visibleLog && setVisibleLog(false);
+  }, []);
+
+  if (!dataLoaded && !localStorage.dataLoaded) {
+    localStorage.dataLoaded = "yes";
+    window.location.reload();
   }
+  const orders = props.orders;
 
-  handlePaginationChange = (e, { activePage }) => {
-    this.setState({ activePage })
-    this.props.updateState({
-      activePage,
-    })
-    this.props.handlePaginationChange(activePage);
-  }
-
-  handleDismiss = () => {
-    this.setState({ visibleLog: false })
-    localStorage.setItem('visibleLog', 'false')
-  }
-
-  componentDidMount() {
-    localStorage.visibleLog &&
-    this.setState({
-      visibleLog: false
-    })
-  }
-
-  render() {
-    if (!this.state.dataLoaded && !localStorage.dataLoaded) { 
-      localStorage.dataLoaded = 'yes'
-      window.location.reload()
-    }
-    const orders = this.props.orders;
-    const {
-      activePage,
-      boundaryRange,
-      siblingRange,
-      showEllipsis,
-      showFirstAndLastNav,
-      showPreviousAndNextNav,
-      totalPages,
-    } = this.state
-    return (
-      <div className='main' style={{ width: '60%', display: 'flex', flexDirection: 'column', marginTop: '1em'}}>
-        { this.props.location.state && this.state.visibleLog &&
-          (<Message 
-            color='green'
-            floating
-            onDismiss={this.handleDismiss}
-            header={this.props.location.state.message} />)
-        }
-        <OrderTableHeading heading='All Orders' orders={orders} orderBy={this.props.orderBy}/>
-        {totalPages > 1 && <Grid centered columns={2}>
+  return (
+    <div
+      className="main"
+      style={{
+        width: "60%",
+        display: "flex",
+        flexDirection: "column",
+        marginTop: "1em"
+      }}
+    >
+      {props.location.state && visibleLog && (
+        <Message
+          color="green"
+          floating
+          onDismiss={handleDismiss}
+          header={props.location.state.message}
+        />
+      )}
+      <OrderTableHeading
+        heading="All Orders"
+        orders={orders}
+        orderBy={props.orderBy}
+      />
+      {totalPages > 1 && (
+        <Grid centered columns={2}>
           <Grid.Column>
             <Pagination
               inverted
-              className='dmx-color'
+              className="dmx-color"
               activePage={activePage}
               boundaryRange={boundaryRange}
-              onPageChange={this.handlePaginationChange}
-              size='big'
+              onPageChange={handlePaginationChange}
+              size="large"
               siblingRange={siblingRange}
               totalPages={totalPages}
               // Heads up! All items are powered by shorthands, if you want to hide one of them, just pass `null` as value
@@ -83,10 +79,10 @@ class Orders extends Component {
               nextItem={showPreviousAndNextNav ? undefined : null}
             />
           </Grid.Column>
-        </Grid>}
-      </div>
-    );
-  }
-} 
+        </Grid>
+      )}
+    </div>
+  );
+}
 
-export default Orders
+export default Orders;
