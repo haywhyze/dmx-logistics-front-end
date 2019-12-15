@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import { withRouter, Switch, Route, Redirect } from "react-router-dom";
 import { Dimmer, Loader, Segment } from "semantic-ui-react";
-import axios from "axios";
 import Header from "./Header";
 import Login from "./Login/Login";
 import NotFound from "./404";
@@ -17,129 +16,103 @@ import Profile from "./Profile/Profile";
 import jwtDecode from "jwt-decode";
 import PrivateRoute from "./PrivateRoute";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import baseUrl from "../api/baseUrl";
+import { orderReducer, initialState } from "../reducers/orderReducer";
+import {
+  fetchOrders,
+  fetchUser,
+  fetchRiders,
+  SORT_ORDERS
+} from "../Actions/orderActions";
 
 function Main(props) {
-  const [isLoading, setLoading] = useState(false);
-  const [orders, setOrders] = useState([]);
-  const [user, setUser] = useState({});
-  const [riders, setRiders] = useState([]);
   const [ordered, setOrdered] = useState({
     id: false,
     status: false,
     date: false,
     price: false
   });
-  const [activePage, setActivePage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [state, dispatch] = useReducer(orderReducer, initialState);
+  const {
+    isLoadingUser,
+    isLoadingOrder,
+    isLoadingRiders,
+    riders,
+    totalPages,
+    activePage,
+    user,
+    orders
+  } = state;
 
-  const orderBy = (e, orders) => {
+  const orderBy = e => {
     e.preventDefault();
     e.persist();
     let sortAttribute = e.target.dataset.name;
     if (!ordered[sortAttribute]) {
       if (sortAttribute === "price") {
-        setOrders(
-          orders.sort((a, b) =>
-            Number(a[sortAttribute]) > Number(b[sortAttribute]) ? -1 : 1
-          )
-        );
+        dispatch({
+          type: SORT_ORDERS,
+          payload: orders
+            .concat()
+            .sort((a, b) =>
+              Number(a[sortAttribute]) > Number(b[sortAttribute]) ? -1 : 1
+            )
+        });
         setOrdered({ ...ordered, [sortAttribute]: true });
       } else {
-        setOrders(
-          orders.sort((a, b) => (a[sortAttribute] > b[sortAttribute] ? -1 : 1))
-        );
+        dispatch({
+          type: SORT_ORDERS,
+          payload: orders
+            .concat()
+            .sort((a, b) => (a[sortAttribute] > b[sortAttribute] ? -1 : 1))
+        });
         setOrdered({ ...ordered, [sortAttribute]: true });
       }
     } else {
       if (sortAttribute === "price") {
-        setOrders(
-          orders.sort((a, b) =>
-            Number(a[sortAttribute]) < Number(b[sortAttribute]) ? -1 : 1
-          )
-        );
+        dispatch({
+          type: SORT_ORDERS,
+          payload: orders
+            .concat()
+            .sort((a, b) =>
+              Number(a[sortAttribute]) < Number(b[sortAttribute]) ? -1 : 1
+            )
+        });
         setOrdered({ ...ordered, [sortAttribute]: false });
       } else {
-        setOrders(
-          orders.sort((a, b) => (a[sortAttribute] < b[sortAttribute] ? -1 : 1))
-        );
+        dispatch({
+          type: SORT_ORDERS,
+          payload: orders
+            .concat()
+            .sort((a, b) => (a[sortAttribute] < b[sortAttribute] ? -1 : 1))
+        });
         setOrdered({ ...ordered, [sortAttribute]: false });
       }
     }
   };
 
   const handlePaginationChange = activePage => {
-    setLoading(true);
-    const token = localStorage.token;
-    const getOrders = () =>
-      axios({
-        headers: { "auth-token": token },
-        url: `${baseUrl}/api/v1/orders?page=${activePage}`
-      });
-    getOrders()
-      .then(response => {
-        setLoading(false);
-        setOrders(
-          response.data.data.rows.sort((a, b) => (a.id > b.id ? -1 : 1))
-        );
-        setActivePage(activePage);
-        setTotalPages(response.data.data.count);
-      })
-      .catch(error => console.log(error.response));
+    fetchOrders(dispatch, activePage);
   };
 
   const updateState = values => {
     console.log(values);
   };
 
+  const token = localStorage.dmx_logistics_token;
+  let decoded, userId, userRole;
+  if (token) decoded = jwtDecode(token);
+  if (decoded) userId = decoded.userId;
+  if (decoded) userRole = decoded.userRole;
+
   useEffect(() => {
-    const token = localStorage.token;
-    let decoded, userId, userRole;
-    if (token) decoded = jwtDecode(token);
-    if (decoded) userId = decoded.userId;
-    if (decoded) userRole = decoded.userRole;
-    // fetch user and orders
-    if (userId) setLoading(true);
-
     if (userRole === "admin") {
-      axios({
-        url: `${baseUrl}/api/v1/users/${userId}/riders`,
-        headers: { "auth-token": token }
-      })
-        .then(response => {
-          setRiders(response.data.data);
-        })
-        .catch(error => console.log(error.response));
+      fetchRiders(dispatch, userId);
     }
-    const getOrders = () =>
-      axios({
-        headers: { "auth-token": token },
-        url: `${baseUrl}/api/v1/orders?page=${activePage}`
-      });
 
-    const getUserAccount = () =>
-      axios({
-        headers: { "auth-token": token },
-        url: `${baseUrl}/api/v1/users/${userId}`
-      });
-
-    if (userId)
-      axios
-        .all([getOrders(), getUserAccount()])
-        .then(
-          axios.spread((orders, user) => {
-            setLoading(false);
-            setUser(user.data.data);
-            setOrders(
-              orders.data.data.rows.sort((a, b) => (a.id > b.id ? -1 : 1))
-            );
-            setTotalPages(orders.data.data.count);
-          })
-        )
-        .catch(error => {
-          console.log(error.response);
-          setLoading(false);
-        });
+    if (userId) {
+      fetchOrders(dispatch, activePage);
+      fetchUser(dispatch, userId);
+    }
   }, []);
 
   const OrderWithId = ({ match }) => {
@@ -158,7 +131,7 @@ function Main(props) {
   );
   const completedOrders = orders.filter(order => order.status === "delivered");
 
-  if (isLoading) {
+  if (isLoadingUser || isLoadingOrder || isLoadingRiders) {
     return (
       <>
         <Dimmer.Dimmable style={{ minHeight: "100vh" }} as={Segment} dimmed>
