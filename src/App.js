@@ -1,23 +1,17 @@
 /* eslint-disable react/prefer-stateless-function */
-import React, { Component } from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import ConfigureStore from './redux/configureStore';
-import Main from './components/Main';
-import './App.css';
-
-const store = ConfigureStore();
+import React, { Component } from "react";
+import { BrowserRouter } from "react-router-dom";
+import Main from "./components/Main";
+import "./App.css";
 
 class App extends Component {
   render() {
     return (
-      <Provider store={store}>
-        <BrowserRouter basename={process.env.PUBLIC_URL}>
-          <div>
-            <Main />
-          </div>
-        </BrowserRouter>
-      </Provider>
+      <BrowserRouter basename={process.env.PUBLIC_URL}>
+        <div>
+          <Main />
+        </div>
+      </BrowserRouter>
     );
   }
 }
