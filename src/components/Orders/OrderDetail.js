@@ -5,7 +5,7 @@ import Axios from 'axios';
 import baseUrl from '../../api/baseUrl';
 
 let errorMess, priceError;
-const token = localStorage.token;
+const token = localStorage.getItem("dmx_logistics_token");
 class OrderDetails extends React.Component {
   constructor(props) {
     super(props)

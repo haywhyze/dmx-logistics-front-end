@@ -118,7 +118,7 @@ function SignUp(props) {
               .post(`${baseUrl}/api/v1/auth/signup`, values)
               .then(response => {
                 errorMess = undefined;
-                localStorage.setItem("token", response.data.token);
+                localStorage.setItem("dmx_logistics_token", response.data.token);
                 setRedirectToReferrer(true);
               })
               .catch(error => {

@@ -96,7 +96,7 @@ class Profile extends React.Component {
           }}
           onSubmit={
             (values, actions) => {
-              const token = localStorage.token;
+              const token = localStorage.getItem("dmx_logistics_token");
               let decoded, userId;
               if (token) decoded = jwtDecode(token);
               if (decoded) userId = decoded.userId;

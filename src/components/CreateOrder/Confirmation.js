@@ -30,7 +30,7 @@ class Confirmation extends Component{
     delete values.destData;
     delete values.senderCountry;
     delete values.senderState;
-    const token = localStorage.token;
+    const token = localStorage.getItem("dmx_logistics_token");
     this.setState({
       isSubmitting: true
     })

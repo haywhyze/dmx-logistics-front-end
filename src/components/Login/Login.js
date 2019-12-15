@@ -61,7 +61,7 @@ function Login(props) {
               .post(`${baseUrl}/api/v1/auth/login`, values)
               .then(response => {
                 errorMess = undefined;
-                localStorage.setItem("token", response.data.token);
+                localStorage.setItem("dmx_logistics_token", response.data.token);
                 setRedirectToReferrer(true);
               })
               .catch(error => {

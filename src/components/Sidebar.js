@@ -8,7 +8,7 @@ import jwtDecode from 'jwt-decode';
 export default function Sidebar(props) {
   const [isNavOpen, toggleNav] = useState(false);
 
-  const token = localStorage.token;
+  const token = localStorage.getItem("dmx_logistics_token");
     let decoded, userRole;
     if (token) decoded = jwtDecode(token);
     if (decoded) userRole = decoded.userRole
