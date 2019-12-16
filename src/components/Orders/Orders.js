@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Grid, Message, Pagination } from "semantic-ui-react";
 import OrderTableHeading from "./OrderTableHeading";
+import { ContextOrders } from "../../components/context/Orders";
 
 function Orders(props) {
+  const state = useContext(ContextOrders);
   const [visibleLog, setVisibleLog] = useState(true);
-  const [dataLoaded] = useState(false);
-  const [activePage, setActivePage] = useState(props.activePage);
+  const [activePage, setActivePage] = useState(state.activePage);
   const [boundaryRange] = useState(1);
   const [siblingRange] = useState(1);
   const [showEllipsis] = useState(true);
   const [showFirstAndLastNav] = useState(true);
   const [showPreviousAndNextNav] = useState(true);
-  const [totalPages] = useState(Math.ceil(props.count / 10));
+  const [totalPages] = useState(Math.ceil(state.totalPages / 10));
+
 
   const handlePaginationChange = (e, { activePage }) => {
     setActivePage(activePage);
@@ -30,11 +32,7 @@ function Orders(props) {
     localStorage.visibleLog && setVisibleLog(false);
   }, []);
 
-  if (!dataLoaded && !localStorage.dataLoaded) {
-    localStorage.dataLoaded = "yes";
-    window.location.reload();
-  }
-  const orders = props.orders;
+  const orders = state.orders;
 
   return (
     <div

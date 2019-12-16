@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer, createContext } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import { withRouter, Switch, Route, Redirect } from "react-router-dom";
 import { Dimmer, Loader, Segment } from "semantic-ui-react";
 import Header from "./Header";
@@ -23,7 +23,7 @@ import {
   fetchRiders,
   SORT_ORDERS
 } from "../Actions/orderActions";
-import { ContextOrders } from '../components/context/Orders'
+import { ContextOrders } from "../components/context/Orders";
 
 function Main(props) {
   const [ordered, setOrdered] = useState({
@@ -39,7 +39,6 @@ function Main(props) {
     isLoadingOrder,
     isLoadingRiders,
     riders,
-    totalPages,
     activePage,
     user,
     orders
@@ -134,19 +133,13 @@ function Main(props) {
   );
   const completedOrders = orders.filter(order => order.status === "delivered");
 
-  if (!state || isLoadingUser || isLoadingOrder || isLoadingRiders) {
+  if (isLoadingUser || isLoadingOrder || isLoadingRiders) {
     return (
       <>
         <Dimmer.Dimmable style={{ minHeight: "100vh" }} as={Segment} dimmed>
           <Dimmer active inverted>
             <Loader>Loading</Loader>
           </Dimmer>
-          <Header
-            history={props.history}
-            location={props.location}
-            user={user}
-          />
-          <Sidebar />
         </Dimmer.Dimmable>
       </>
     );
@@ -154,11 +147,8 @@ function Main(props) {
     return (
       <ContextOrders.Provider value={state}>
         <div>
-          <Header
-            history={props.history}
-            location={props.location}
-          />
-          <Sidebar/>
+          <Header history={props.history} location={props.location} />
+          <Sidebar />
           <TransitionGroup>
             <CSSTransition
               key={props.location.key}
@@ -174,14 +164,10 @@ function Main(props) {
                   component={() => (
                     <Orders
                       {...props}
-                      user={user}
-                      orders={orders}
                       orderBy={orderBy}
                       updateState={updateState}
                       {...props}
-                      count={totalPages}
                       handlePaginationChange={handlePaginationChange}
-                      activePage={activePage}
                     />
                   )}
                 />
@@ -191,7 +177,6 @@ function Main(props) {
                   component={() => (
                     <Current
                       {...props}
-                      user={user}
                       orders={currentOrders}
                       orderBy={orderBy}
                     />
@@ -203,7 +188,6 @@ function Main(props) {
                   component={() => (
                     <Completed
                       {...props}
-                      user={user}
                       orders={completedOrders}
                       orderBy={orderBy}
                     />
