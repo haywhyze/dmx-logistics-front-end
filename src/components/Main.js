@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer, createContext } from "react";
 import { withRouter, Switch, Route, Redirect } from "react-router-dom";
 import { Dimmer, Loader, Segment } from "semantic-ui-react";
 import Header from "./Header";
@@ -23,6 +23,7 @@ import {
   fetchRiders,
   SORT_ORDERS
 } from "../Actions/orderActions";
+import { ContextOrders } from '../components/context/Orders'
 
 function Main(props) {
   const [ordered, setOrdered] = useState({
@@ -31,6 +32,7 @@ function Main(props) {
     date: false,
     price: false
   });
+  const [isLoggedIn, setLoggedIn] = useState(false);
   const [state, dispatch] = useReducer(orderReducer, initialState);
   const {
     isLoadingUser,
@@ -105,6 +107,7 @@ function Main(props) {
   if (decoded) userRole = decoded.userRole;
 
   useEffect(() => {
+    if (userId) setLoggedIn(true);
     if (userRole === "admin") {
       fetchRiders(dispatch, userId);
     }
@@ -113,7 +116,7 @@ function Main(props) {
       fetchOrders(dispatch, activePage);
       fetchUser(dispatch, userId);
     }
-  }, []);
+  }, [isLoggedIn]);
 
   const OrderWithId = ({ match }) => {
     return (
@@ -131,7 +134,7 @@ function Main(props) {
   );
   const completedOrders = orders.filter(order => order.status === "delivered");
 
-  if (isLoadingUser || isLoadingOrder || isLoadingRiders) {
+  if (!state || isLoadingUser || isLoadingOrder || isLoadingRiders) {
     return (
       <>
         <Dimmer.Dimmable style={{ minHeight: "100vh" }} as={Segment} dimmed>
@@ -149,79 +152,84 @@ function Main(props) {
     );
   } else
     return (
-      <div>
-        <Header history={props.history} location={props.location} user={user} />
-        <Sidebar user={user} />
-        <TransitionGroup>
-          <CSSTransition
-            key={props.location.key}
-            classNames="page"
-            timeout={300}
-          >
-            <Switch>
-              <Route path="/login" component={Login} />
-              <Route path="/register" component={SignUp} />
-              <PrivateRoute
-                exact
-                path={["/", "/all"]}
-                component={() => (
-                  <Orders
-                    {...props}
-                    user={user}
-                    orders={orders}
-                    orderBy={orderBy}
-                    updateState={updateState}
-                    {...props}
-                    count={totalPages}
-                    handlePaginationChange={handlePaginationChange}
-                    activePage={activePage}
-                  />
-                )}
-              />
-              <PrivateRoute
-                exact
-                path="/current"
-                component={() => (
-                  <Current
-                    {...props}
-                    user={user}
-                    orders={currentOrders}
-                    orderBy={orderBy}
-                  />
-                )}
-              />
-              <PrivateRoute
-                exact
-                path="/completed"
-                component={() => (
-                  <Completed
-                    {...props}
-                    user={user}
-                    orders={completedOrders}
-                    orderBy={orderBy}
-                  />
-                )}
-              />
-              <PrivateRoute
-                exact
-                path="/new"
-                component={() => <New {...props} user={user} />}
-              />
-              <PrivateRoute path="/orders/:orderId" component={OrderWithId} />
-              <PrivateRoute
-                exact
-                path="/profile"
-                component={() => (
-                  <Profile updateState={updateState} {...props} user={user} />
-                )}
-              />
-              <PrivateRoute exact path="/new-rider" component={CreateRider} />
-              <Route path="/404" component={NotFound} />
-              <Redirect to="/404" />
-            </Switch>
-          </CSSTransition>
-        </TransitionGroup>
-      </div>
+      <ContextOrders.Provider value={state}>
+        <div>
+          <Header
+            history={props.history}
+            location={props.location}
+          />
+          <Sidebar/>
+          <TransitionGroup>
+            <CSSTransition
+              key={props.location.key}
+              classNames="page"
+              timeout={300}
+            >
+              <Switch>
+                <Route path="/login" component={Login} />
+                <Route path="/register" component={SignUp} />
+                <PrivateRoute
+                  exact
+                  path={["/", "/all"]}
+                  component={() => (
+                    <Orders
+                      {...props}
+                      user={user}
+                      orders={orders}
+                      orderBy={orderBy}
+                      updateState={updateState}
+                      {...props}
+                      count={totalPages}
+                      handlePaginationChange={handlePaginationChange}
+                      activePage={activePage}
+                    />
+                  )}
+                />
+                <PrivateRoute
+                  exact
+                  path="/current"
+                  component={() => (
+                    <Current
+                      {...props}
+                      user={user}
+                      orders={currentOrders}
+                      orderBy={orderBy}
+                    />
+                  )}
+                />
+                <PrivateRoute
+                  exact
+                  path="/completed"
+                  component={() => (
+                    <Completed
+                      {...props}
+                      user={user}
+                      orders={completedOrders}
+                      orderBy={orderBy}
+                    />
+                  )}
+                />
+                <PrivateRoute
+                  exact
+                  path="/new"
+                  component={() => <New {...props} user={user} />}
+                />
+                <PrivateRoute path="/orders/:orderId" component={OrderWithId} />
+                <PrivateRoute
+                  exact
+                  path="/profile"
+                  component={() => (
+                    <Profile updateState={updateState} {...props} user={user} />
+                  )}
+                />
+                <PrivateRoute exact path="/new-rider" component={CreateRider} />
+                <Route path="/404" component={NotFound} />
+                <Redirect to="/404" />
+              </Switch>
+            </CSSTransition>
+          </TransitionGroup>
+        </div>
+      </ContextOrders.Provider>
     );
 }
 
