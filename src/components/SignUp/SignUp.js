@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Header, Button, Message } from "semantic-ui-react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import * as Yup from "yup";
 import axios from "axios";
 import baseUrl from "../../api/baseUrl";
@@ -87,15 +87,12 @@ function SignUp(props) {
   }
   return (
     <div
-      className="main"
       style={{
-        width: "60%",
         display: "flex",
         flexDirection: "column",
         minHeight: "100vh",
         justifyContent: "center",
-        alignItems: "center",
-        marginTop: "-2em"
+        alignItems: "center"
       }}
     >
       <div>
@@ -118,7 +115,10 @@ function SignUp(props) {
               .post(`${baseUrl}/api/v1/auth/signup`, values)
               .then(response => {
                 errorMess = undefined;
-                localStorage.setItem("dmx_logistics_token", response.data.token);
+                localStorage.setItem(
+                  "dmx_logistics_token",
+                  response.data.token
+                );
                 setRedirectToReferrer(true);
               })
               .catch(error => {
@@ -307,7 +307,13 @@ function SignUp(props) {
                   )}
                   {successMess && <Message success header={successMess} />}
                 </div>
-                <div style={{ display: "flex", justifyContent: "center" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    flexDirection: "column"
+                  }}
+                >
                   <Button
                     loading={isSubmitting}
                     type="submit"
@@ -315,6 +321,10 @@ function SignUp(props) {
                   >
                     Sign Up
                   </Button>
+                  <p>
+                    Have an account?{" "}
+                    <Link to="/login">Login</Link>{" "}
+                  </p>
                 </div>
               </Form>
             );

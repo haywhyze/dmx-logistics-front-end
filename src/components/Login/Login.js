@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Header, Button, Message } from "semantic-ui-react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import * as Yup from "yup";
 import axios from "axios";
 import baseUrl from "../../api/baseUrl";
@@ -34,17 +34,15 @@ function Login(props) {
       />
     );
   }
-  localStorage.clear();
+  localStorage.removeItem("dmx_logistics_token");
   return (
     <div
-      className="main"
       style={{
-        width: "60%",
         display: "flex",
         flexDirection: "column",
         minHeight: "100vh",
+        justifyContent: "center",
         alignItems: "center",
-        marginTop: "5em"
       }}
     >
       <div>
@@ -61,7 +59,10 @@ function Login(props) {
               .post(`${baseUrl}/api/v1/auth/login`, values)
               .then(response => {
                 errorMess = undefined;
-                localStorage.setItem("dmx_logistics_token", response.data.token);
+                localStorage.setItem(
+                  "dmx_logistics_token",
+                  response.data.token
+                );
                 setRedirectToReferrer(true);
               })
               .catch(error => {
@@ -126,7 +127,13 @@ function Login(props) {
                     />
                   )}
                 </div>
-                <div style={{ display: "flex", justifyContent: "center" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    flexDirection: "column"
+                  }}
+                >
                   <Button
                     loading={isSubmitting}
                     type="submit"
@@ -134,6 +141,10 @@ function Login(props) {
                   >
                     Login
                   </Button>
+                  <p>
+                    Haven't signed up yet?{" "}
+                    <Link to="/register">Create new account</Link>{" "}
+                  </p>
                 </div>
               </Form>
             );
