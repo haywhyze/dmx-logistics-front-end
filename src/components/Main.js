@@ -1,10 +1,7 @@
 import React, { useState, useEffect, useReducer } from "react";
-import { withRouter, Switch, Route, Redirect } from "react-router-dom";
+import { withRouter, Switch, Redirect } from "react-router-dom";
 import { Dimmer, Loader, Segment } from "semantic-ui-react";
 import Header from "./Header";
-import Login from "./Login/Login";
-import NotFound from "./404";
-import SignUp from "./SignUp/SignUp";
 import Sidebar from "./Sidebar";
 import Current from "./Orders/Current";
 import Completed from "./Orders/Completed";
@@ -156,8 +153,6 @@ function Main(props) {
               timeout={300}
             >
               <Switch>
-                <Route path="/login" component={Login} />
-                <Route path="/register" component={SignUp} />
                 <PrivateRoute
                   exact
                   path={["/", "/all"]}
@@ -207,7 +202,6 @@ function Main(props) {
                   )}
                 />
                 <PrivateRoute exact path="/new-rider" component={CreateRider} />
-                <Route path="/404" component={NotFound} />
                 <Redirect to="/404" />
               </Switch>
             </CSSTransition>
