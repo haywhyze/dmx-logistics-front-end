@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import React, { Component } from "react";
+import React from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import SenderReceiverForm from "./SenderReceiverForm";
@@ -17,39 +17,40 @@ const valSchema = Yup.object().shape({
   recipientAddress: Yup.string().max(280, "Address provided too long")
 });
 
-class RecipientDetails extends Component {
-  
-  render() {
-    return (
-      <div>
-        <Formik
-          initialValues={{
-            recipientName: this.props.values.recipientName || "",
-            recipientPhone: this.props.values.recipientPhone || "",
-            recipientEmail: this.props.values.recipientEmail || "",
-          }}
-          onSubmit={values => {
-            this.props.saveAndContinue(values);
-          }}
-          validationSchema={() => valSchema}
-        >
-          {({ errors, touched }) => {
-            return (
-              <SenderReceiverForm
-                errors={errors}
-                touched={touched}
-                values={this.props.values}
-                handleChange={this.props.handleChange}
-                handleScriptLoad={this.props.handleScriptLoad}
-                back={this.props.back}
-                sender={false}
-              />
-            );
-          }}
-        </Formik>
-      </div>
-    );
-  }
-}
-
-export default RecipientDetails;
+export default ({
+  values,
+  saveAndContinue,
+  handleChange,
+  handleScriptLoad,
+  back
+}) => {
+  return (
+    <div>
+      <Formik
+        initialValues={{
+          recipientName: values.recipientName || "",
+          recipientPhone: values.recipientPhone || "",
+          recipientEmail: values.recipientEmail || ""
+        }}
+        onSubmit={values => {
+          saveAndContinue(values);
+        }}
+        validationSchema={() => valSchema}
+      >
+        {({ errors, touched }) => {
+          return (
+            <SenderReceiverForm
+              errors={errors}
+              touched={touched}
+              values={values}
+              handleChange={handleChange}
+              handleScriptLoad={handleScriptLoad}
+              back={back}
+              sender={false}
+            />
+          );
+        }}
+      </Formik>
+    </div>
+  );
+};
