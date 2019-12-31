@@ -1,17 +1,17 @@
 import React, { Component } from "react";
-import SenderDetails from "./SenderDetails";
-import RecipientDetails from "./RecipientDetails";
 import OrderDetails from "./OrderDetails";
 import Confirmation from "./Confirmation";
 import Success from "./Success";
+import SenderReceiverDetails from "./SenderReceiverDetails";
 
 class NewOrder extends Component {
   state = {
     step: 1,
 
-    senderName: "",
-    senderPhone: "",
-    senderEmail: "",
+    senderName:
+      `${this.props.user.firstName} ${this.props.user.lastName}` || "",
+    senderPhone: this.props.user.phoneNumber || "",
+    senderEmail: this.props.user.email || "",
     senderAddress: this.props.user.address || "",
     senderState: "",
     senderCountry: "",
@@ -49,6 +49,7 @@ class NewOrder extends Component {
       ...values
     });
   };
+
   handleChange = input => event => {
     this.setState({ [input]: event.target.value });
   };
@@ -98,23 +99,26 @@ class NewOrder extends Component {
     switch (step) {
       case 1:
         return (
-          <SenderDetails
+          <SenderReceiverDetails
             nextStep={this.nextStep}
             updateState={this.updateState}
             handleChange={this.handleChange}
             values={values}
             user={this.props.user}
+            sender={true}
+            prevStep={this.prevStep}            
           />
         );
       case 2:
         return (
-          <RecipientDetails
+          <SenderReceiverDetails
             nextStep={this.nextStep}
-            prevStep={this.prevStep}
             updateState={this.updateState}
             handleChange={this.handleChange}
             values={values}
             user={this.props.user}
+            sender={false}
+            prevStep={this.prevStep}            
           />
         );
       case 3:
