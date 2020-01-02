@@ -9,7 +9,14 @@ export const initialState = {
   riders: [],
   activePage: 1,
   totalPages: 1,
-  error: ""
+  error: "",
+  newOrder: null,
+  newOrderLoading: false,
+  newOrderError: "",
+  senderAddressLoading: false,
+  senderAddressError: "",
+  recipientAddressLoading: false,
+  recipientAddressError: ""
 };
 
 export function orderReducer(state, action) {
@@ -91,6 +98,66 @@ export function orderReducer(state, action) {
         ...state,
         totalPages: action.payload
       };
+
+    case type.ADD_SENDER_DETAILS:
+    case type.UPDATE_SENDER_DETAILS:
+    case type.UPDATE_SENDER_ADDRESS_SUCCESS:
+    case type.UPDATE_RECIPIENT_DETAILS:
+    case type.UPDATE_RECIPIENT_ADDRESS_SUCCESS:
+    case type.UPDATE_ORDER_INFO:
+    case type.ADD_PRICE:
+      return {
+        ...state,
+        newOrder: {
+          ...state.newOrder,
+          ...action.payload
+        }
+      };
+
+    case type.CREATE_NEW_ORDER:
+      return {
+        ...state,
+        newOrderError: "",
+        newOrderLoading: action.payload
+      };
+
+    case type.CREATE_NEW_ORDER_SUCCESS:
+      return {
+        ...state,
+        orders: state.orders.concat(action.payload),
+        newOrderError: ""
+      };
+
+    case type.CREATE_NEW_ORDER_FAILURE:
+      return {
+        ...state,
+        newOrderError: action.payload
+      };
+
+    case type.UPDATE_SENDER_ADDRESS:
+      return {
+        ...state,
+        senderAddressLoading: action.payload
+      };
+
+    case type.UPDATE_SENDER_ADDRESS_FAILURE:
+      return {
+        ...state,
+        senderAddressError: action.payload
+      };
+
+    case type.UPDATE_RECIPIENT_ADDRESS:
+      return {
+        ...state,
+        recipientAddressLoading: action.payload
+      };
+
+    case type.UPDATE_RECIPIENT_ADDRESS_FAILURE:
+      return {
+        ...state,
+        recipientAddressError: action.payload
+      };
+
     default:
       return state;
   }
