@@ -18,7 +18,8 @@ import {
   fetchOrders,
   fetchUser,
   fetchRiders,
-  SORT_ORDERS
+  SORT_ORDERS,
+  addSenderDetails
 } from "../Actions/orderActions";
 import { ContextOrders } from "../components/context/Orders";
 
@@ -111,8 +112,9 @@ function Main(props) {
     if (userId) {
       fetchOrders(dispatch, activePage);
       fetchUser(dispatch, userId);
+      addSenderDetails(dispatch, state.user)
     }
-  }, [isLoggedIn]);
+  }, [state.user.firstName]);
 
   const OrderWithId = ({ match }) => {
     return (
@@ -142,7 +144,7 @@ function Main(props) {
     );
   } else
     return (
-      <ContextOrders.Provider value={state}>
+      <ContextOrders.Provider value={[state, dispatch]}>
         <div>
           <Header history={props.history} location={props.location} />
           <Sidebar />

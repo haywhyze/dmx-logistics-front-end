@@ -14,7 +14,7 @@ import baseUrl from "../api/baseUrl";
 import { ContextOrders } from "../components/context/Orders";
 
 function Header(props) {
-  const { user } = useContext(ContextOrders);
+  const [{ user }] = useContext(ContextOrders);
 
   const trigger = (
     <span>

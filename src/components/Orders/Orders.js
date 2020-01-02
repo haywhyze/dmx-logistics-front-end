@@ -4,7 +4,7 @@ import OrderTableHeading from "./OrderTableHeading";
 import { ContextOrders } from "../../components/context/Orders";
 
 function Orders(props) {
-  const state = useContext(ContextOrders);
+  const [state] = useContext(ContextOrders);
   const [visibleLog, setVisibleLog] = useState(true);
   const [activePage, setActivePage] = useState(state.activePage);
   const [boundaryRange] = useState(1);
