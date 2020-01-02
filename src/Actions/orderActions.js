@@ -1,4 +1,4 @@
-import { getOrders, getUser, getRiders } from "../api/Orders";
+import { getOrders, getUser, getRiders, createNewOrder } from "../api/Orders";
 
 export const SORT_ORDERS = "SORT_ORDERS";
 export const SET_TOTAL_PAGES = "SET_TOTAL_PAGES";
@@ -15,10 +15,6 @@ export const FETCH_USER_FAILURE = "FETCH_USER_FAILURE";
 export const FETCH_RIDERS = "FETCH_RIDERS";
 export const FETCH_RIDERS_SUCCESS = "FETCH_RIDERS_SUCCESS";
 export const FETCH_RIDERS_FAILURE = "FETCH_RIDERS_FAILURE";
-
-export const CREATE_ORDER = "CREATE_ORDER";
-export const CREATE_ORDER_SUCCESS = "CREATE_ORDER_SUCCESS";
-export const CREATE_ORDER_FAILURE = "CREATE_ORDER_FAILURE";
 
 export const CREATE_RIDER = "CREATE_RIDER";
 export const CREATE_RIDER_SUCCESS = "CREATE_RIDER_SUCCESS";
@@ -55,6 +51,28 @@ export const SET_PRICE_FAILURE = "SET_PRICE_FAILURE";
 export const ASSIGN_ORDER = "ASSIGN_ORDER";
 export const ASSIGN_ORDER_SUCCESS = "ASSIGN_ORDER_SUCCESS";
 export const ASSIGN_ORDER_FAILURE = "ASSIGN_ORDER_FAILURE";
+
+export const ADD_SENDER_DETAILS = "ADD_SENDER_DETAILS";
+export const UPDATE_SENDER_DETAILS = "UPDATE_SENDER_DETAILS";
+
+export const UPDATE_SENDER_ADDRESS = "UPDATE_SENDER_ADDRESS";
+export const UPDATE_SENDER_ADDRESS_FAILURE = "UPDATE_SENDER_ADDRESS_FAILURE";
+export const UPDATE_SENDER_ADDRESS_SUCCESS = "UPDATE_SENDER_ADDRESS_SUCCESS";
+
+export const UPDATE_RECIPIENT_DETAILS = "UPDATE_RECIPIENT_DETAILS";
+
+export const UPDATE_RECIPIENT_ADDRESS = "UPDATE_RECIPIENT_ADDRESS";
+export const UPDATE_RECIPIENT_ADDRESS_FAILURE =
+  "UPDATE_RECIPIENT_ADDRESS_FAILURE";
+export const UPDATE_RECIPIENT_ADDRESS_SUCCESS =
+  "UPDATE_RECIPIENT_ADDRESS_SUCCESS";
+
+export const UPDATE_ORDER_INFO = "UPDATE_ORDER_INFO";
+export const ADD_PRICE = "ADD_PRICE";
+
+export const CREATE_NEW_ORDER = "CREATE_NEW_ORDER";
+export const CREATE_NEW_ORDER_FAILURE = "CREATE_NEW_ORDER_FAILURE";
+export const CREATE_NEW_ORDER_SUCCESS = "CREATE_NEW_ORDER_SUCCESS";
 
 export const action = (type, payload) => ({
   type,
@@ -106,4 +124,33 @@ export const fetchRiders = (dispatch, userId) => {
     },
     userId
   );
+};
+
+export const createOrder = (dispatch, data) => {
+  dispatch(action(CREATE_NEW_ORDER, true));
+  createNewOrder(
+    res => {
+      dispatch(action(CREATE_NEW_ORDER_SUCCESS, res.data.data));
+      dispatch(action(CREATE_NEW_ORDER, false));
+    },
+    err => {
+      dispatch(action(CREATE_NEW_ORDER_FAILURE, err.response.data.error));
+      dispatch(action(CREATE_NEW_ORDER, false));
+    },
+    data
+  );
+};
+
+export const addSenderDetails = (dispatch, user) => {
+  const senderData = {
+    senderName: `${user.firstName} ${user.lastName}` || "",
+    senderPhone: user.phoneNumber || "",
+    senderEmail: user.email || "",
+    senderAddress: user.address || ""
+  };
+
+  dispatch({
+    type: ADD_SENDER_DETAILS,
+    payload: senderData
+  });
 };
