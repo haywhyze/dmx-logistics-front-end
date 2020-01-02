@@ -31,3 +31,10 @@ export const getRiders = (success, failure, userId) => {
     .then(response => success(response))
     .catch(error => failure(error));
 };
+
+export const createNewOrder = (success, failure, data) => {
+  axiosWithAuth()
+    .post(`${baseUrl}/api/v1/orders`, data)
+    .then(response => success(response))
+    .catch(error => failure(error));
+};
