@@ -1,7 +1,7 @@
 import React from "react";
 
 function Success() {
-  setTimeout(() => (window.location.href = "/all"), 2500);
+  // setTimeout(() => (window.location.href = "/all"), 2500);
   return (
     <div
       style={{

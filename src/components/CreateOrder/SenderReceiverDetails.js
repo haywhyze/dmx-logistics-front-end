@@ -8,19 +8,19 @@ import Script from "react-load-script";
 let autocompleteSender, autocompleteRecipient;
 
 const SenderReceiverDetails = ({
-  values,
+  data,
   updateState,
   sender,
   handleChange,
   nextStep,
   prevStep
 }) => {
-  const saveAndContinue = data => {
-    !values.senderCountry && handlePlaceSelect("sender");
-    !values.recipientCountry &&
-      values.recipientAddress &&
-      handlePlaceSelect("recipient");
-    updateState(data);
+  const saveAndContinue = value => {
+    // !data.senderCountry && handlePlaceSelect("sender");
+    // !data.recipientCountry &&
+    //   data.recipientAddress &&
+    //   handlePlaceSelect("recipient");
+    updateState(value);
     nextStep();
   };
 
@@ -122,12 +122,12 @@ const SenderReceiverDetails = ({
       </Header>
       {sender && (
         <>
-          <Script
+          {/* <Script
             url="https://maps.googleapis.com/maps/api/js?key=AIzaSyBGFjD-GUhv7z3uj8KjNM91c2q0ivWnecg&libraries=places,geometry"
             onLoad={() => handleScriptLoad("senderAddress")}
-          />
+          /> */}
           <SenderDetails
-            values={values}
+            data={data}
             handleChange={handleChange}
             handleScriptLoad={handleScriptLoad}
             back={back}
@@ -137,12 +137,12 @@ const SenderReceiverDetails = ({
       )}
       {!sender && (
         <>
-          <Script
+          {/* <Script
             url="https://maps.googleapis.com/maps/api/js?key=AIzaSyBGFjD-GUhv7z3uj8KjNM91c2q0ivWnecg&libraries=places,geometry"
             onLoad={() => handleScriptLoad("recipientAddress")}
-          />
+          /> */}
           <RecipientDetails
-            values={values}
+            data={data}
             handleChange={handleChange}
             handleScriptLoad={handleScriptLoad}
             back={back}

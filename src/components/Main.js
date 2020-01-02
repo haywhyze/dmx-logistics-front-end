@@ -114,7 +114,7 @@ function Main(props) {
       fetchUser(dispatch, userId);
       addSenderDetails(dispatch, state.user)
     }
-  }, [state.user.firstName]);
+  }, [state.user.firstName, isLoggedIn]);
 
   const OrderWithId = ({ match }) => {
     return (

@@ -18,7 +18,7 @@ const valSchema = Yup.object().shape({
 });
 
 export default ({
-  values,
+  data,
   saveAndContinue,
   handleChange,
   handleScriptLoad,
@@ -28,9 +28,9 @@ export default ({
     <div>
       <Formik
         initialValues={{
-          recipientName: values.recipientName || "",
-          recipientPhone: values.recipientPhone || "",
-          recipientEmail: values.recipientEmail || ""
+          recipientName: "",
+          recipientPhone: "",
+          recipientEmail: ""
         }}
         onSubmit={values => {
           saveAndContinue(values);
@@ -42,7 +42,7 @@ export default ({
             <SenderReceiverForm
               errors={errors}
               touched={touched}
-              values={values}
+              data={data}
               handleChange={handleChange}
               handleScriptLoad={handleScriptLoad}
               back={back}
