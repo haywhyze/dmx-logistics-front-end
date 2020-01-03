@@ -16,10 +16,10 @@ const SenderReceiverDetails = ({
   prevStep
 }) => {
   const saveAndContinue = value => {
-    // !data.senderCountry && handlePlaceSelect("sender");
-    // !data.recipientCountry &&
-    //   data.recipientAddress &&
-    //   handlePlaceSelect("recipient");
+    !data.senderCountry && handlePlaceSelect("sender");
+    !data.recipientCountry &&
+      data.recipientAddress &&
+      handlePlaceSelect("recipient");
     updateState(value);
     nextStep();
   };
@@ -122,10 +122,10 @@ const SenderReceiverDetails = ({
       </Header>
       {sender && (
         <>
-          {/* <Script
+          <Script
             url="https://maps.googleapis.com/maps/api/js?key=AIzaSyBGFjD-GUhv7z3uj8KjNM91c2q0ivWnecg&libraries=places,geometry"
             onLoad={() => handleScriptLoad("senderAddress")}
-          /> */}
+          />
           <SenderDetails
             data={data}
             handleChange={handleChange}
@@ -137,10 +137,10 @@ const SenderReceiverDetails = ({
       )}
       {!sender && (
         <>
-          {/* <Script
+          <Script
             url="https://maps.googleapis.com/maps/api/js?key=AIzaSyBGFjD-GUhv7z3uj8KjNM91c2q0ivWnecg&libraries=places,geometry"
             onLoad={() => handleScriptLoad("recipientAddress")}
-          /> */}
+          />
           <RecipientDetails
             data={data}
             handleChange={handleChange}
