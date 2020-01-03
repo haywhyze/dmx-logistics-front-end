@@ -19,7 +19,6 @@ import {
   fetchUser,
   fetchRiders,
   SORT_ORDERS,
-  addSenderDetails
 } from "../Actions/orderActions";
 import { ContextOrders } from "../components/context/Orders";
 
@@ -112,7 +111,6 @@ function Main(props) {
     if (userId) {
       fetchOrders(dispatch, activePage);
       fetchUser(dispatch, userId);
-      addSenderDetails(dispatch, state.user)
     }
   }, [state.user.firstName, isLoggedIn]);
 

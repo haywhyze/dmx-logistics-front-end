@@ -52,31 +52,16 @@ export const ASSIGN_ORDER = "ASSIGN_ORDER";
 export const ASSIGN_ORDER_SUCCESS = "ASSIGN_ORDER_SUCCESS";
 export const ASSIGN_ORDER_FAILURE = "ASSIGN_ORDER_FAILURE";
 
-export const ADD_SENDER_DETAILS = "ADD_SENDER_DETAILS";
-export const UPDATE_SENDER_DETAILS = "UPDATE_SENDER_DETAILS";
-
-export const UPDATE_SENDER_ADDRESS = "UPDATE_SENDER_ADDRESS";
-export const UPDATE_SENDER_ADDRESS_FAILURE = "UPDATE_SENDER_ADDRESS_FAILURE";
-export const UPDATE_SENDER_ADDRESS_SUCCESS = "UPDATE_SENDER_ADDRESS_SUCCESS";
-
-export const UPDATE_RECIPIENT_DETAILS = "UPDATE_RECIPIENT_DETAILS";
-
-export const UPDATE_RECIPIENT_ADDRESS = "UPDATE_RECIPIENT_ADDRESS";
-export const UPDATE_RECIPIENT_ADDRESS_FAILURE =
-  "UPDATE_RECIPIENT_ADDRESS_FAILURE";
-export const UPDATE_RECIPIENT_ADDRESS_SUCCESS =
-  "UPDATE_RECIPIENT_ADDRESS_SUCCESS";
-
 export const UPDATE_ORDER_INFO = "UPDATE_ORDER_INFO";
-export const ADD_PRICE = "ADD_PRICE";
 
 export const CREATE_NEW_ORDER = "CREATE_NEW_ORDER";
 export const CREATE_NEW_ORDER_FAILURE = "CREATE_NEW_ORDER_FAILURE";
 export const CREATE_NEW_ORDER_SUCCESS = "CREATE_NEW_ORDER_SUCCESS";
 
-export const action = (type, payload) => ({
+export const action = (type, payload, step=null) => ({
   type,
-  payload
+  payload,
+  step
 });
 
 export const fetchOrders = (dispatch, page) => {
@@ -126,31 +111,16 @@ export const fetchRiders = (dispatch, userId) => {
   );
 };
 
-export const createOrder = (dispatch, data) => {
-  dispatch(action(CREATE_NEW_ORDER, true));
+export const createOrder = (dispatch, data, step) => {
+  dispatch(action(CREATE_NEW_ORDER, data, step));
   createNewOrder(
     res => {
-      dispatch(action(CREATE_NEW_ORDER_SUCCESS, res.data.data));
-      dispatch(action(CREATE_NEW_ORDER, false));
+      dispatch(action(CREATE_NEW_ORDER_SUCCESS, res.data.data, step));
+      dispatch(action(CREATE_NEW_ORDER, false, step));
     },
     err => {
-      dispatch(action(CREATE_NEW_ORDER_FAILURE, err.response.data.error));
-      dispatch(action(CREATE_NEW_ORDER, false));
+      dispatch(action(CREATE_NEW_ORDER_FAILURE, err.response.data.error, step));
     },
     data
   );
-};
-
-export const addSenderDetails = (dispatch, user) => {
-  const senderData = {
-    senderName: `${user.firstName} ${user.lastName}` || "",
-    senderPhone: user.phoneNumber || "",
-    senderEmail: user.email || "",
-    senderAddress: user.address || ""
-  };
-
-  dispatch({
-    type: ADD_SENDER_DETAILS,
-    payload: senderData
-  });
 };
