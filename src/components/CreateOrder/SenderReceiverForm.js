@@ -2,8 +2,14 @@ import React from "react";
 import { Button } from "semantic-ui-react";
 import { Form, Field, ErrorMessage } from "formik";
 
-export default ({ errors, touched, handleChange, data, back, sender }) => {
-
+export default ({
+  errors,
+  touched,
+  handleChange,
+  locationData,
+  back,
+  sender
+}) => {
   return (
     <Form className="ui form new">
       <div
@@ -80,7 +86,7 @@ export default ({ errors, touched, handleChange, data, back, sender }) => {
         <label>
           {`${sender ? "Sender" : "Recipient"}`}'s Address
           <Field
-            value={data[`${sender ? "sender" : "recipient"}Address`]}
+            value={locationData[`${sender ? "sender" : "recipient"}Address`]}
             id={`${sender ? "sender" : "recipient"}Address`}
             type="text"
             name={`${sender ? "sender" : "recipient"}Address`}

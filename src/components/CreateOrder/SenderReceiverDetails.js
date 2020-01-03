@@ -10,15 +10,17 @@ let autocompleteSender, autocompleteRecipient;
 const SenderReceiverDetails = ({
   data,
   updateState,
+  locationData,
+  updateLocation,
   sender,
   handleChange,
   nextStep,
   prevStep
 }) => {
   const saveAndContinue = value => {
-    !data.senderCountry && handlePlaceSelect("sender");
-    !data.recipientCountry &&
-      data.recipientAddress &&
+    !locationData.senderCountry && handlePlaceSelect("sender");
+    !locationData.recipientCountry &&
+      locationData.recipientAddress &&
       handlePlaceSelect("recipient");
     updateState(value);
     nextStep();
@@ -59,7 +61,7 @@ const SenderReceiverDetails = ({
 
     // Check if address is valid
     if (country && state) {
-      updateState({
+      updateLocation({
         [`${senderReceiver}State`]: state["long_name"],
         [`${senderReceiver}Country`]: country["long_name"],
         [`${senderReceiver}Address`]: `${place.formatted_address}`,
@@ -128,6 +130,7 @@ const SenderReceiverDetails = ({
           />
           <SenderDetails
             data={data}
+            locationData={locationData}
             handleChange={handleChange}
             handleScriptLoad={handleScriptLoad}
             back={back}
@@ -143,6 +146,7 @@ const SenderReceiverDetails = ({
           />
           <RecipientDetails
             data={data}
+            locationData={locationData}
             handleChange={handleChange}
             handleScriptLoad={handleScriptLoad}
             back={back}

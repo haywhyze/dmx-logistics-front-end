@@ -21,6 +21,7 @@ const valSchema = Yup.object().shape({
 
 export default ({
   data,
+  locationData,
   saveAndContinue,
   handleChange,
   handleScriptLoad,
@@ -44,7 +45,7 @@ export default ({
             <SenderReceiverForm
               errors={errors}
               touched={touched}
-              data={data}
+              locationData={locationData}
               handleChange={handleChange}
               handleScriptLoad={handleScriptLoad}
               back={back}

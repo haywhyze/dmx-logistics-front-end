@@ -6,35 +6,46 @@ import { ContextOrders } from "../context/Orders";
 import SenderReceiverDetails from "./SenderReceiverDetails";
 
 const NewOrderContainer = ({ location }) => {
-  const [{ user }] = useContext(ContextOrders);
+  const [{ user, globalStep, newOrder }] = useContext(ContextOrders);
 
-  const [state, setState] = useState({
-    step: 1,
+  const [step, setStep] = useState(globalStep || 1);
 
-    senderName: `${user.firstName} ${user.lastName}` || "",
-    senderPhone: user.phoneNumber || "",
-    senderEmail: user.email || "",
+  const [locationState, setLocationState] = useState({
     senderAddress: user.address || "",
     senderState: "",
     senderCountry: "",
 
-    recipientName: "",
-    recipientPhone: "",
-    recipientEmail: "",
-    recipientAddress: "",
+    recipientAddress: (newOrder && newOrder.recipientAddress) || "",
     recipientState: "",
-    recipientCountry: "",
+    recipientCountry: ""
+  });
 
-    itemDescription: "",
-    paymentStatus: "",
-    weight: 1,
-    extraInfo: "",
+  const [state, setState] = useState({
+    senderName: `${user.firstName} ${user.lastName}` || "",
+    senderPhone: user.phoneNumber || "",
+    senderEmail: user.email || "",
+
+    recipientName: (newOrder && newOrder.recipientName) || "",
+    recipientPhone: (newOrder && newOrder.recipientPhone) || "",
+    recipientEmail: (newOrder && newOrder.recipientEmail) || "",
+
+    itemDescription: (newOrder && newOrder.itemDescription) || "",
+    paymentStatus: (newOrder && newOrder.paymentStatus) || "",
+    weight: (newOrder && newOrder.weight) || 1,
+    extraInfo: (newOrder && newOrder.extraInfo) || "",
     priceEstimate: ""
   });
 
-  const nextStep = () => setState({ ...state, step: state.step + 1 });
+  const nextStep = () => setStep(step + 1);
 
-  const prevStep = () => setState({ ...state, step: state.step - 1 });
+  const prevStep = () => setStep(step - 1);
+
+  const updateLocation = data => {
+    setLocationState({
+      ...locationState,
+      ...data
+    });
+  };
 
   const updateState = data => {
     setState({
@@ -44,10 +55,10 @@ const NewOrderContainer = ({ location }) => {
   };
 
   const handleChange = input => event => {
-    setState({ ...state, [input]: event.target.value });
+    setLocationState({ ...locationState, [input]: event.target.value });
   };
 
-  switch (state.step) {
+  switch (step) {
     case 1:
       return (
         <SenderReceiverDetails
@@ -56,6 +67,8 @@ const NewOrderContainer = ({ location }) => {
           sender={true}
           updateState={updateState}
           handleChange={handleChange}
+          updateLocation={updateLocation}
+          locationData={locationState}
           prevStep={prevStep}
         />
       );
@@ -67,12 +80,20 @@ const NewOrderContainer = ({ location }) => {
           sender={false}
           updateState={updateState}
           handleChange={handleChange}
+          updateLocation={updateLocation}
+          locationData={locationState}
           prevStep={prevStep}
         />
       );
     case 3:
       return (
-        <OrderDetails nextStep={nextStep} prevStep={prevStep} data={state} />
+        <OrderDetails
+          nextStep={nextStep}
+          prevStep={prevStep}
+          data={state}
+          locationData={locationState}
+          updateState={updateState}
+        />
       );
     case 4:
       return (
@@ -80,7 +101,10 @@ const NewOrderContainer = ({ location }) => {
           nextStep={nextStep}
           prevStep={prevStep}
           data={state}
+          locationData={locationState}
+          updateState={updateState}
           location={location}
+          step={step}
         />
       );
     case 5:
