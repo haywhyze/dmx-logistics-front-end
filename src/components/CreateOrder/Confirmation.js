@@ -1,5 +1,14 @@
 import React, { useContext } from "react";
-import { Button, Grid, Segment, Message, Icon } from "semantic-ui-react";
+import { Redirect } from "react-router-dom";
+import {
+  Button,
+  Grid,
+  Segment,
+  Message,
+  Icon,
+  Dimmer,
+  Loader
+} from "semantic-ui-react";
 import getPrice from "../../getPrice";
 import GridSegment from "./GridSegment";
 import ListItem from "./ListItem";
@@ -7,21 +16,17 @@ import { ContextOrders } from "../context/Orders";
 import { createOrder } from "../../Actions/orderActions";
 
 let price;
-export default ({ data, prevStep, nextStep, step }) => {
+export default ({ data, locationData, prevStep, step }) => {
   const [state, dispatch] = useContext(ContextOrders);
 
   const saveAndContinue = e => {
     e.preventDefault();
     data.price = "";
-    delete data.recipientCountry;
-    delete data.recipientState;
-    delete data.srcData;
-    delete data.destData;
-    delete data.senderCountry;
-    delete data.senderState;
-
-    createOrder(dispatch, data, step);
-  
+    const locationDetails = {
+      senderAddress: locationData.senderAddress,
+      recipientAddress: locationData.recipientAddress
+    };
+    createOrder(dispatch, { ...data, ...locationDetails }, step);
   };
 
   const back = e => {
@@ -33,20 +38,25 @@ export default ({ data, prevStep, nextStep, step }) => {
     senderName,
     senderPhone,
     senderEmail,
-    senderAddress,
+
     recipientName,
     recipientPhone,
     recipientEmail,
-    recipientAddress,
-    senderState,
-    srcData,
-    destData,
-    recipientState,
+
     paymentStatus,
     weight,
     extraInfo,
     itemDescription
   } = data;
+
+  const {
+    senderAddress,
+    recipientAddress,
+    senderState,
+    srcData,
+    destData,
+    recipientState
+  } = locationData;
 
   if (senderState === "Lagos" && recipientState === "Lagos")
     price = getPrice(srcData, destData);
@@ -123,6 +133,29 @@ export default ({ data, prevStep, nextStep, step }) => {
       />
     </>
   );
+
+  if (state.newOrderSuccess) {
+    return (
+      <Redirect
+        to={{
+          pathname: "/all",
+          state: { message: "Order created successfully" }
+        }}
+      />
+    );
+  }
+
+  if (state.isLoadingUser || state.isLoadingOrder) {
+    return (
+      <>
+        <Dimmer.Dimmable style={{ minHeight: "100vh" }} as={Segment} dimmed>
+          <Dimmer active inverted>
+            <Loader>Loading</Loader>
+          </Dimmer>
+        </Dimmer.Dimmable>
+      </>
+    );
+  }
 
   return (
     <div>
