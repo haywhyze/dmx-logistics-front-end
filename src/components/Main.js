@@ -112,6 +112,7 @@ function Main(props) {
       fetchOrders(dispatch, activePage);
       fetchUser(dispatch, userId);
     }
+    
   }, [state.user.firstName, isLoggedIn]);
 
   const OrderWithId = ({ match }) => {

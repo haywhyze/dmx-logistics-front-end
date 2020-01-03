@@ -57,6 +57,7 @@ export const UPDATE_ORDER_INFO = "UPDATE_ORDER_INFO";
 export const CREATE_NEW_ORDER = "CREATE_NEW_ORDER";
 export const CREATE_NEW_ORDER_FAILURE = "CREATE_NEW_ORDER_FAILURE";
 export const CREATE_NEW_ORDER_SUCCESS = "CREATE_NEW_ORDER_SUCCESS";
+export const RESET_MESSAGE = "RESET_MESSAGE";
 
 export const action = (type, payload, step=null) => ({
   type,
@@ -116,7 +117,7 @@ export const createOrder = (dispatch, data, step) => {
   createNewOrder(
     res => {
       dispatch(action(CREATE_NEW_ORDER_SUCCESS, res.data.data, step));
-      dispatch(action(CREATE_NEW_ORDER, false, step));
+      fetchOrders(dispatch, 1)
     },
     err => {
       dispatch(action(CREATE_NEW_ORDER_FAILURE, err.response.data.error, step));
@@ -124,3 +125,7 @@ export const createOrder = (dispatch, data, step) => {
     data
   );
 };
+
+export const resetMessages = (dispatch) => {
+  dispatch(action(RESET_MESSAGE))
+}

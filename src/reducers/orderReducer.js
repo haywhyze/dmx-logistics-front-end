@@ -18,6 +18,7 @@ export const initialState = {
   recipientAddressLoading: false,
   recipientAddressError: "",
   globalStep: null,
+  newOrderSuccess: false,
 };
 
 export function orderReducer(state, action) {
@@ -26,7 +27,7 @@ export function orderReducer(state, action) {
       return {
         ...state,
         isLoadingOrder: action.payload,
-        error: ""
+        error: "",
       };
 
     case type.FETCH_ORDERS_SUCCESS:
@@ -106,7 +107,8 @@ export function orderReducer(state, action) {
         newOrder: {
           ...state.newOrder,
           ...action.payload
-        }
+        },
+        newOrderSuccess: false,
       };
 
     case type.CREATE_NEW_ORDER:
@@ -119,11 +121,13 @@ export function orderReducer(state, action) {
       };
 
     case type.CREATE_NEW_ORDER_SUCCESS:
+      console.log(action.payload);
       return {
         ...state,
-        orders: state.orders.concat(action.payload),
         newOrderError: "",
-        globalStep: action.step
+        newOrderLoading: false,
+        globalStep: action.step,
+        newOrderSuccess: true
       };
 
     case type.CREATE_NEW_ORDER_FAILURE:
@@ -133,6 +137,12 @@ export function orderReducer(state, action) {
         globalStep: action.step,
         newOrderLoading: false,
       };
+
+    case type.RESET_MESSAGE:
+      return {
+        ...state,
+        newOrderSuccess: false
+      }
 
     default:
       return state;

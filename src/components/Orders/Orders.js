@@ -2,10 +2,12 @@ import React, { useState, useEffect, useContext } from "react";
 import { Grid, Message, Pagination } from "semantic-ui-react";
 import OrderTableHeading from "./OrderTableHeading";
 import { ContextOrders } from "../../components/context/Orders";
+import { resetMessages } from "../../Actions/orderActions";
 
 function Orders(props) {
-  const [state] = useContext(ContextOrders);
+  const [state, dispatch] = useContext(ContextOrders);
   const [visibleLog, setVisibleLog] = useState(true);
+  const [visibleMessage, setVisibleMessage] = useState(state.newOrderSuccess);
   const [activePage, setActivePage] = useState(state.activePage);
   const [boundaryRange] = useState(1);
   const [siblingRange] = useState(1);
@@ -13,7 +15,6 @@ function Orders(props) {
   const [showFirstAndLastNav] = useState(true);
   const [showPreviousAndNextNav] = useState(true);
   const [totalPages] = useState(Math.ceil(state.totalPages / 10));
-
 
   const handlePaginationChange = (e, { activePage }) => {
     setActivePage(activePage);
@@ -28,9 +29,24 @@ function Orders(props) {
     localStorage.setItem("visibleLog", "false");
   };
 
+  const dismissMessage = () => {
+    setVisibleMessage(false);
+    resetMessages(dispatch);
+  };
+
   useEffect(() => {
     localStorage.visibleLog && setVisibleLog(false);
-  }, []);
+    let timer;
+    if (visibleMessage)
+      timer = setTimeout(() => {
+        setVisibleMessage(false);
+        resetMessages(dispatch);
+        console.log(state.newOrderSuccess);
+      }, 4000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [state.newOrderSuccess]);
 
   const orders = state.orders;
 
@@ -50,6 +66,14 @@ function Orders(props) {
           floating
           onDismiss={handleDismiss}
           header={props.location.state.message}
+        />
+      )}
+      {visibleMessage && (
+        <Message
+          color="green"
+          floating
+          onDismiss={dismissMessage}
+          header="New Order Created"
         />
       )}
       <OrderTableHeading
