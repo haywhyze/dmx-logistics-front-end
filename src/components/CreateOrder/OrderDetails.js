@@ -16,9 +16,9 @@ const valSchema = Yup.object().shape({
   extraInfo: Yup.string().max(250, "extra information is too long")
 });
 
-export default ({ updateState, nextStep, prevStep, values }) => {
-  const saveAndContinue = values => {
-    updateState(values);
+export default ({ updateState, nextStep, prevStep, data }) => {
+  const saveAndContinue = data => {
+    updateState(data);
     nextStep();
   };
 
@@ -35,10 +35,10 @@ export default ({ updateState, nextStep, prevStep, values }) => {
       </Header>
       <Formik
         initialValues={{
-          itemDescription: values.itemDescription || "",
-          weight: values.weight || "",
-          extraInfo: values.extraInfo || "",
-          paymentStatus: values.paymentStatus || "pay on pickup"
+          itemDescription: data.itemDescription || "",
+          weight: data.weight || "",
+          extraInfo: data.extraInfo || "",
+          paymentStatus: data.paymentStatus || "pay on pickup"
         }}
         onSubmit={values => {
           saveAndContinue(values);
