@@ -1,43 +1,27 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { Button, Grid, Segment, Message, Icon } from "semantic-ui-react";
 import getPrice from "../../getPrice";
-import axios from "axios";
 import GridSegment from "./GridSegment";
 import ListItem from "./ListItem";
-import baseUrl from "../../api/baseUrl";
+import { ContextOrders } from "../context/Orders";
+import { createOrder } from "../../Actions/orderActions";
 
-let errorMess;
 let price;
-export default ({ values, prevStep, nextStep }) => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+export default ({ data, prevStep, nextStep, step }) => {
+  const [state, dispatch] = useContext(ContextOrders);
 
   const saveAndContinue = e => {
     e.preventDefault();
-    values.price = "";
-    delete values.recipientCountry;
-    delete values.recipientState;
-    delete values.srcData;
-    delete values.destData;
-    delete values.senderCountry;
-    delete values.senderState;
-    const token = localStorage.getItem("dmx_logistics_token");
-    setIsSubmitting(true);
-    axios({
-      method: "post",
-      url: `${baseUrl}/api/v1/orders`,
-      headers: { "auth-token": token },
-      data: values
-    })
-      .then(response => {
-        setIsSubmitting(false);
-        console.log(response);
-        nextStep();
-      })
-      .catch(error => {
-        errorMess = error.response.data.error;
-        setIsSubmitting(false);
-        errorMess = error.response.data.error;
-      });
+    data.price = "";
+    delete data.recipientCountry;
+    delete data.recipientState;
+    delete data.srcData;
+    delete data.destData;
+    delete data.senderCountry;
+    delete data.senderState;
+
+    createOrder(dispatch, data, step);
+  
   };
 
   const back = e => {
@@ -62,7 +46,7 @@ export default ({ values, prevStep, nextStep }) => {
     weight,
     extraInfo,
     itemDescription
-  } = values;
+  } = data;
 
   if (senderState === "Lagos" && recipientState === "Lagos")
     price = getPrice(srcData, destData);
@@ -178,10 +162,14 @@ export default ({ values, prevStep, nextStep }) => {
         {/* Display Error Message */}
         {/* ========================= */}
         <div style={{ margin: "1em" }}>
-          {errorMess && (
+          {state.newOrderError && (
             <>
-              <Message error header="Action Forbidden" content={errorMess} />
-              {(errorMess = undefined)}
+              <Message
+                error
+                header="Action Forbidden"
+                content={state.newOrderError}
+              />
+              {/* {(errorMess = undefined)} */}
               <p>
                 Please go back to effect changes before this can be submitted
               </p>
@@ -196,7 +184,11 @@ export default ({ values, prevStep, nextStep }) => {
           <Button secondary onClick={back}>
             Back
           </Button>
-          <Button primary loading={isSubmitting} onClick={saveAndContinue}>
+          <Button
+            primary
+            loading={state.newOrderLoading}
+            onClick={saveAndContinue}
+          >
             Confirm
           </Button>
         </Grid.Row>
