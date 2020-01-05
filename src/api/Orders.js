@@ -38,3 +38,30 @@ export const createNewOrder = (success, failure, data) => {
     .then(response => success(response))
     .catch(error => failure(error));
 };
+
+export const changeStatus = (success, failure, orderId, path, change) => {
+  axiosWithAuth()
+    .patch(`${baseUrl}/api/v1/orders/${orderId}/${path}`, {
+      status: change
+    })
+    .then(response => success(response))
+    .catch(error => failure(error));
+};
+
+export const changeRider = (success, failure, orderId, path, change) => {
+  axiosWithAuth()
+    .patch(`${baseUrl}/api/v1/orders/${orderId}/${path}`, {
+      riderId: change
+    })
+    .then(response => success(response))
+    .catch(error => failure(error));
+}
+
+export const changePrice = (success, failure, orderId, change) => {
+  axiosWithAuth()
+    .patch(`${baseUrl}/api/v1/orders/${orderId}/price`, {
+      price: change
+    })
+    .then(response => success(response))
+    .catch(error => failure(error));
+}
