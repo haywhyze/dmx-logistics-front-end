@@ -1,22 +1,16 @@
 import React from "react";
-import {
-  Statistic,
-  Card,
-  Button,
-  Label,
-  Grid,
-  Segment,
-  Header,
-  Icon,
-  Message,
-  Select,
-  Form,
-  Input,
-  Confirm
-} from "semantic-ui-react";
+import { Grid, Header } from "semantic-ui-react";
 import _ from "lodash";
 import Axios from "axios";
 import baseUrl from "../../api/baseUrl";
+import OrderInfo from "./OrderInfo";
+import ChangePrice from "./ChangePrice";
+import PaymentInfo from "./PaymentInfo";
+import AssignRider from "./AssignRider";
+import { formatToNaira } from "./RenderOrder";
+import DeliveryInfo from "./DeliveryInfo";
+import ButtonGroup from "./ButtonGroup";
+import OrderActionsConfirm from "./OrderActionsConfirm";
 
 let errorMess, priceError;
 const token = localStorage.getItem("dmx_logistics_token");
@@ -264,10 +258,6 @@ class OrderDetails extends React.Component {
       value: rider.id
     }));
 
-    function formatToNaira(x) {
-      return x.toLocaleString("en-NG", { style: "currency", currency: "NGN" });
-    }
-
     return (
       <>
         {this.props.order && (
@@ -287,362 +277,80 @@ class OrderDetails extends React.Component {
               subheader={this.props.order.id}
             />
             <Grid stackable columns={3}>
-              <Grid.Column>
-                <h3>Item Description</h3>
-                <Segment color="black">
-                  {this.props.order.itemDescription}
-                </Segment>
-              </Grid.Column>
-              <Grid.Column>
-                <h3>Status</h3>
-                <Segment
-                  textAlign="center"
-                  color={
-                    this.props.order.status === "processing"
-                      ? "blue"
-                      : this.props.order.status === "confirmed"
-                      ? "orange"
-                      : this.props.order.status === "in transit"
-                      ? "teal"
-                      : this.props.order.status === "delivered"
-                      ? "green"
-                      : "black"
-                  }
-                  inverted
-                >
-                  {_.capitalize(this.props.order.status)}
-                </Segment>
-              </Grid.Column>
-              <Grid.Column>
-                <h3>Date Ordered</h3>
-                <Segment textAlign="right">
-                  {new Date(this.props.order.createdAt).toDateString()}
-                </Segment>
-              </Grid.Column>
-              {this.props.user.userRole !== "admin" ? null : this.props.order
-                  .status === "cancelled" ||
-                this.props.order.status === "delivered" ? null : (
-                <>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      width: "100%"
-                    }}
-                  >
-                    <Segment color="black" style={{ marginBottom: "1rem" }}>
-                      <Form onSubmit={this.handlePriceSubmit}>
-                        <Form.Group inline>
-                          <label>Adjust the order price to</label>
-                          <Input
-                            onChange={this.handlePriceChange}
-                            labelPosition="right"
-                            type="number"
-                            placeholder="Enter New Price"
-                          >
-                            <input />
-                          </Input>
-                          <Button
-                            loading={this.state.isSubmittingPrice}
-                            type="submit"
-                            style={{}}
-                            primary
-                          >
-                            Change Price
-                          </Button>
-                        </Form.Group>
-                      </Form>
-                    </Segment>
-                  </div>
-                  {priceError && (
-                    <div
-                      style={{
-                        marginBottom: "1em",
-                        display: "flex",
-                        justifyContent: "center",
-                        width: "100%"
-                      }}
-                    >
-                      <Message
-                        error
-                        header="Action Forbidden"
-                        content={priceError}
-                      />
-                    </div>
-                  )}
-                  {(priceError = undefined)}
-                </>
-              )}
-              {this.props.order.paymentStatus !== "pay on pickup" &&
-              this.props.order.paymentStatus !== "pay on delivery" ? null : (
-                <Grid.Column textAlign="center" width={8}>
-                  <Segment textAlign="center" className="dmx-color" inverted>
-                    <Statistic size="tiny" className="dmx-color" inverted>
-                      <Statistic.Value>
-                        {formatToNaira(Number(this.props.order.price))}
-                      </Statistic.Value>
-                      <Statistic.Label>Price</Statistic.Label>
-                    </Statistic>
-                  </Segment>
-                </Grid.Column>
-              )}
+              <OrderInfo
+                itemDescription={this.props.order.itemDescription}
+                status={this.props.order.status}
+                createdAt={this.props.order.createdAt}
+              />
 
-              {this.props.order.paymentStatus !== "pay on pickup" &&
-              this.props.order.paymentStatus !== "pay on delivery" ? null : (
-                <Grid.Column textAlign="center" width={8}>
-                  <Segment textAlign="center" inverted>
-                    <Statistic size="tiny" inverted>
-                      <Statistic.Value>
-                        {_.upperCase(this.props.order.paymentStatus)}
-                      </Statistic.Value>
-                      <Statistic.Label>Payment Method</Statistic.Label>
-                    </Statistic>
-                  </Segment>
-                </Grid.Column>
-              )}
+              <ChangePrice
+                userRole={this.props.user.userRole}
+                status={this.props.order.status}
+                handlePriceChange={this.handlePriceChange}
+                handlePriceSubmit={this.handlePriceSubmit}
+                isSubmittingPrice={this.state.isSubmittingPrice}
+                priceError={priceError}
+              />
 
-              {this.props.user.userRole !== "admin" ? null : this.props.order
-                  .rider ? null : this.props.order.status !==
-                "confirmed" ? null : (
-                <>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      width: "100%"
-                    }}
-                  >
-                    <Segment color="teal" style={{ marginBottom: "1rem" }}>
-                      <Form onSubmit={this.handleSubmit}>
-                        <Form.Group inline>
-                          <Form.Field
-                            inline
-                            control={Select}
-                            onChange={this.handleChange}
-                            label="Assign this order to &nbsp;"
-                            placeholder="Select a Rider"
-                            options={riderOptions}
-                          />
-                          <Button
-                            loading={this.state.isSubmitting}
-                            type="submit"
-                            style={{ marginLeft: "1rem" }}
-                            primary
-                          >
-                            Assign
-                          </Button>
-                        </Form.Group>
-                      </Form>
-                    </Segment>
-                  </div>
-                  {errorMess && (
-                    <div style={{ marginBottom: "1em", margin: "0 auto" }}>
-                      <Message
-                        error
-                        header="Action Forbidden"
-                        content={errorMess}
-                      />
-                    </div>
-                  )}
-                  {(errorMess = undefined)}
-                </>
-              )}
-              {this.props.order.rider && (
-                <Message
-                  info
-                  icon="bicycle"
-                  header={
-                    this.props.user.userRole === "rider"
-                      ? `This package has been assigned to you`
-                      : `This package will be delivered by ${this.props.order.rider.firstName} ${this.props.order.rider.lastName}`
-                  }
-                  content={
-                    this.props.user.userRole === "rider"
-                      ? `You will find details of the pickup and delivery below.`
-                      : `You can get through to him on this number ${this.props.order.rider.phoneNumber}`
-                  }
-                />
-              )}
-              <Grid.Column textAlign="center" width={8}>
-                <Card fluid>
-                  <Card.Content
-                    header={_.upperFirst(this.props.order.senderName)}
-                  />
-                  <Card.Content
-                    meta={
-                      <span>
-                        <Icon name="phone" /> {this.props.order.senderPhone}
-                      </span>
-                    }
-                  />
-                  <Card.Content
-                    description={
-                      <>
-                        <Icon name="map marker alternate" />{" "}
-                        {this.props.order.senderAddress}
-                      </>
-                    }
-                  />
-                </Card>
-                <Label size="tiny" attached="top left">
-                  <Icon name="truck" /> Pick Up Details
-                </Label>
-              </Grid.Column>
-              <Grid.Column textAlign="center" width={8}>
-                <Card fluid>
-                  <Card.Content
-                    header={_.upperFirst(this.props.order.recipientName)}
-                  />
-                  <Card.Content
-                    meta={
-                      <span>
-                        <Icon name="phone" /> {this.props.order.recipientPhone}
-                      </span>
-                    }
-                  />
-                  <Card.Content
-                    description={
-                      <>
-                        <Icon name="map marker alternate" />{" "}
-                        {this.props.order.recipientAddress}
-                      </>
-                    }
-                  />
-                </Card>
-                <Label size="tiny" attached="top left">
-                  <Icon name="truck" /> Delivery Details
-                </Label>
-              </Grid.Column>
-              <Grid.Row centered columns={2}>
-                <Grid.Column>
-                  <Button.Group fluid>
-                    {this.props.user.userRole === "rider" ? null : this.props
-                        .order.status === "delivered" ||
-                      this.props.order.status === "cancelled" ? null : (
-                      <>
-                        <Button
-                          loading={isSubmittingCancel}
-                          secondary
-                          onClick={this.showCancel}
-                        >
-                          Cancel
-                        </Button>
-                      </>
-                    )}
-                    {this.props.user.userRole !== "rider" ? null : !this.props
-                        .order.rider ? null : this.props.order.status ===
-                        "delivered" ||
-                      this.props.order.status === "cancelled" ||
-                      this.props.order.status === "in transit" ? null : (
-                      <>
-                        <Button
-                          loading={isSubmittingReject}
-                          secondary
-                          onClick={this.showReject}
-                        >
-                          Reject
-                        </Button>
-                      </>
-                    )}
-                    {this.props.order.status !== "processing" ? null : this
-                        .props.user.userRole === "personal" ? null : (
-                      <>
-                        <Button.Or />
-                        <Button
-                          loading={isSubmittingConfirm}
-                          positive
-                          onClick={this.showConfirm}
-                        >
-                          Confirm
-                        </Button>
-                      </>
-                    )}
-                    {this.props.user.userRole !== "rider" ? null : !this.props
-                        .order.rider ? null : this.props.order.status ===
-                        "delivered" ||
-                      this.props.order.status === "cancelled" ||
-                      this.props.order.status === "in transit" ? null : (
-                      <>
-                        <Button.Or />
-                        <Button
-                          loading={isSubmittingAccept}
-                          positive
-                          onClick={this.showAccept}
-                        >
-                          Accept
-                        </Button>
-                      </>
-                    )}
-                    {this.props.user.userRole === "personal" ||
-                    this.props.user.userRole === "business" ? null : this.props
-                        .order.status === "processing" ||
-                      this.props.order.status === "cancelled" ||
-                      this.props.order.status === "delivered" ? null : (
-                      <>
-                        <Button.Or />
-                        <Button
-                          loading={isSubmittingComplete}
-                          primary
-                          onClick={this.showComplete}
-                        >
-                          Delivered
-                        </Button>
-                      </>
-                    )}
-                  </Button.Group>
-                </Grid.Column>
-              </Grid.Row>
+              <PaymentInfo
+                paymentStatus={this.props.order.paymentStatus}
+                price={formatToNaira(Number(this.props.order.price))}
+              />
+
+              <AssignRider
+                riderOptions={riderOptions}
+                errorMess={errorMess}
+                handleChange={this.handleChange}
+                handleSubmit={this.handleSubmit}
+                isSubmitting={this.isSubmitting}
+                userRole={this.props.user.userRole}
+                status={this.props.order.status}
+                rider={this.props.order.rider}
+              />
+
+              <DeliveryInfo
+                senderName={this.props.order.senderName}
+                senderPhone={this.props.order.senderPhone}
+                senderAddress={this.props.order.senderAddress}
+                recipientName={this.props.order.recipientName}
+                recipientPhone={this.props.order.recipientPhone}
+                recipientAddress={this.props.order.recipientAddress}
+              />
+
+              <ButtonGroup
+                isSubmittingCancel={isSubmittingCancel}
+                isSubmittingReject={isSubmittingReject}
+                isSubmittingConfirm={isSubmittingConfirm}
+                isSubmittingAccept={isSubmittingAccept}
+                isSubmittingComplete={isSubmittingComplete}
+                showCancel={this.showCancel}
+                showAccept={this.showAccept}
+                showComplete={this.showComplete}
+                showReject={this.showReject}
+                showConfirm={this.showConfirm}
+                order={this.props.order}
+                user={this.props.user}
+              />
             </Grid>
-            {/* {console.log(this.props)} */}
           </div>
         )}
-        <div>
-          <Confirm
-            style={{ height: "unset", left: "unset", top: "unset" }}
-            open={openConfirm}
-            onCancel={this.closeConfirm}
-            cancelButton="Never Mind"
-            confirmButton="Yes, Please"
-            onConfirm={this.handleConfirm}
-            content={`Are you sure you want to confirm this Order?`}
-          />
-          <Confirm
-            style={{ height: "unset", left: "unset", top: "unset" }}
-            open={openComplete}
-            onCancel={this.closeComplete}
-            onConfirm={this.handleComplete}
-            cancelButton="Never Mind"
-            confirmButton="Yes, Please"
-            content={`Are you sure you want to mark this order as delivered?`}
-          />
-          <Confirm
-            style={{ height: "unset", left: "unset", top: "unset" }}
-            open={openCancel}
-            onConfirm={this.handleCancel}
-            onCancel={this.closeCancel}
-            cancelButton="Never Mind"
-            confirmButton="Yes, Please"
-            content={`Are you sure you want to cancel this order?`}
-          />
-          <Confirm
-            style={{ height: "unset", left: "unset", top: "unset" }}
-            open={openAccept}
-            onConfirm={this.handleAccept}
-            onCancel={this.closeAccept}
-            cancelButton="Never Mind"
-            confirmButton="Yes, Please"
-            content={`Are you sure you want to accept this assignment?`}
-          />
-          <Confirm
-            style={{ height: "unset", left: "unset", top: "unset" }}
-            open={openReject}
-            onConfirm={this.handleReject}
-            onCancel={this.closeReject}
-            cancelButton="Never Mind"
-            confirmButton="Yes, Please"
-            content={`Are you sure you want to reject this assignment?`}
-          />
-        </div>
+        <OrderActionsConfirm
+          openConfirm={openConfirm}
+          closeConfirm={this.closeConfirm}
+          handleConfirm={this.handleConfirm}
+          openComplete={openComplete}
+          closeComplete={this.closeComplete}
+          handleComplete={this.handleComplete}
+          openCancel={openCancel}
+          closeCancel={this.closeCancel}
+          handleCancel={this.handleCancel}
+          openAccept={openAccept}
+          closeAccept={this.closeAccept}
+          handleAccept={this.handleAccept}
+          openReject={openReject}
+          closeReject={this.closeReject}
+          handleReject={this.handleReject}
+        />
       </>
     );
   }
