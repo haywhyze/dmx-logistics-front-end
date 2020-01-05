@@ -8,19 +8,20 @@ import Completed from "./Orders/Completed";
 import CreateRider from "./CreateRider/CreateRider";
 import New from "./CreateOrder/New";
 import Orders from "./Orders/Orders";
-import OrderDetails from "./Orders/OrderDetail";
+import OrderDetails from "./Orders/OrderDetails";
 import Profile from "./Profile/Profile";
 import jwtDecode from "jwt-decode";
 import PrivateRoute from "./PrivateRoute";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import { orderReducer, initialState } from "../reducers/orderReducer";
+import { orderReducer } from "../reducers/orderReducer";
 import {
   fetchOrders,
   fetchUser,
   fetchRiders,
-  SORT_ORDERS,
+  SORT_ORDERS
 } from "../Actions/orderActions";
 import { ContextOrders } from "../components/context/Orders";
+import { initialState } from "../reducers/initialState";
 
 function Main(props) {
   const [ordered, setOrdered] = useState({
@@ -112,7 +113,6 @@ function Main(props) {
       fetchOrders(dispatch, activePage);
       fetchUser(dispatch, userId);
     }
-    
   }, [state.user.firstName, isLoggedIn]);
 
   const OrderWithId = ({ match }) => {

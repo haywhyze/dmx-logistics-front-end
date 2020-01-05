@@ -1,33 +1,12 @@
 import * as type from "../Actions/orderActions";
 
-export const initialState = {
-  isLoadingOrder: false,
-  isLoadingUser: false,
-  isLoadingRiders: false,
-  orders: [],
-  user: {},
-  riders: [],
-  activePage: 1,
-  totalPages: 1,
-  error: "",
-  newOrder: null,
-  newOrderLoading: false,
-  newOrderError: "",
-  senderAddressLoading: false,
-  senderAddressError: "",
-  recipientAddressLoading: false,
-  recipientAddressError: "",
-  globalStep: null,
-  newOrderSuccess: false,
-};
-
 export function orderReducer(state, action) {
   switch (action.type) {
     case type.FETCH_ORDERS:
       return {
         ...state,
         isLoadingOrder: action.payload,
-        error: "",
+        error: ""
       };
 
     case type.FETCH_ORDERS_SUCCESS:
@@ -108,7 +87,7 @@ export function orderReducer(state, action) {
           ...state.newOrder,
           ...action.payload
         },
-        newOrderSuccess: false,
+        newOrderSuccess: false
       };
 
     case type.CREATE_NEW_ORDER:
@@ -121,7 +100,6 @@ export function orderReducer(state, action) {
       };
 
     case type.CREATE_NEW_ORDER_SUCCESS:
-      console.log(action.payload);
       return {
         ...state,
         newOrderError: "",
@@ -135,15 +113,163 @@ export function orderReducer(state, action) {
         ...state,
         newOrderError: action.payload,
         globalStep: action.step,
-        newOrderLoading: false,
+        newOrderLoading: false
       };
 
     case type.RESET_MESSAGE:
       return {
         ...state,
         newOrderSuccess: false
-      }
+      };
 
+    case type.ACCEPT_ORDER:
+      return {
+        ...state,
+        orderError: "",
+        assignOrderLoading: true
+      };
+    case type.ACCEPT_ORDER_FAILURE:
+      return {
+        ...state,
+        orderError: action.payload,
+        assignOrderLoading: false
+      };
+    case type.ACCEPT_ORDER_SUCCESS:
+      return {
+        ...state,
+        orderError: "",
+        assignOrderLoading: false,
+        orders: state.orders.map(order =>
+          order.id === action.payload.id ? action.payload : order
+        )
+      };
+    case type.CANCEL_ORDER:
+      return {
+        ...state,
+        orderError: "",
+        cancelOrderLoading: true
+      };
+    case type.CANCEL_ORDER_FAILURE:
+      return {
+        ...state,
+        orderError: action.payload,
+        cancelOrderLoading: false
+      };
+    case type.CANCEL_ORDER_SUCCESS:
+      return {
+        ...state,
+        orderError: "",
+        cancelOrderLoading: false,
+        orders: state.orders.map(order =>
+          order.id === action.payload.id ? action.payload : order
+        )
+      };
+    case type.CONFIRM_ORDER:
+      return {
+        ...state,
+        orderError: "",
+        confirmOrderLoading: true
+      };
+    case type.CONFIRM_ORDER_FAILURE:
+      return {
+        ...state,
+        orderError: action.payload,
+        confirmOrderLoading: false
+      };
+    case type.CONFIRM_ORDER_SUCCESS:
+      return {
+        ...state,
+        orderError: "",
+        confirmOrderLoading: false,
+        orders: state.orders.map(order =>
+          order.id === action.payload.id ? action.payload : order
+        )
+      };
+    case type.COMPLETE_ORDER:
+      return {
+        ...state,
+        orderError: "",
+        completeOrderLoading: true
+      };
+    case type.COMPLETE_ORDER_FAILURE:
+      return {
+        ...state,
+        orderError: action.payload,
+        completeOrderLoading: false
+      };
+    case type.COMPLETE_ORDER_SUCCESS:
+      return {
+        ...state,
+        orderError: "",
+        completeOrderLoading: false,
+        orders: state.orders.map(order =>
+          order.id === action.payload.id ? action.payload : order
+        )
+      };
+    case type.ASSIGN_ORDER:
+      return {
+        ...state,
+        assignOrderError: "",
+        assignOrderLoading: true
+      };
+    case type.ASSIGN_ORDER_FAILURE:
+      return {
+        ...state,
+        assignOrderError: action.payload,
+        assignOrderLoading: false
+      };
+    case type.ASSIGN_ORDER_SUCCESS:
+      console.log(action.payload);
+      return {
+        ...state,
+        assignOrderError: "",
+        assignOrderLoading: false,
+        orders: state.orders.map(order =>
+          order.id === action.payload.id ? action.payload : order
+        )
+      };
+    case type.REJECT_ORDER:
+      return {
+        ...state,
+        orderError: "",
+        rejectOrderLoading: true
+      };
+    case type.REJECT_ORDER_FAILURE:
+      return {
+        ...state,
+        orderError: action.payload,
+        rejectOrderLoading: false
+      };
+    case type.REJECT_ORDER_SUCCESS:
+      return {
+        ...state,
+        orderError: "",
+        rejectOrderLoading: false,
+        orders: state.orders.map(order =>
+          order.id === action.payload.id ? action.payload : order
+        )
+      };
+    case type.SET_PRICE:
+      return {
+        ...state,
+        setPriceError: "",
+        setPriceLoading: true
+      };
+    case type.SET_PRICE_FAILURE:
+      return {
+        ...state,
+        setPriceError: action.payload,
+        setPriceLoading: false
+      };
+    case type.SET_PRICE_SUCCESS:
+      return {
+        ...state,
+        setPriceError: "",
+        setPriceLoading: false,
+        orders: state.orders.map(order =>
+          order.id === action.payload.id ? action.payload : order
+        )
+      };
     default:
       return state;
   }
