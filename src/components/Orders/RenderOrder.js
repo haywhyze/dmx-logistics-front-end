@@ -2,10 +2,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Icon, Button, Label, Table } from "semantic-ui-react";
 
+export function formatToNaira(x) {
+  return x.toLocaleString("en-NG", { style: "currency", currency: "NGN" });
+}
+
 const RenderOrderItem = ({ order }) => {
-  function formatToNaira(x){
-    return x.toLocaleString('en-NG', { style: 'currency', currency: 'NGN' });
-  }
   return (
     <>
       <Table.Cell>
