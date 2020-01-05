@@ -1,4 +1,12 @@
-import { getOrders, getUser, getRiders, createNewOrder } from "../api/Orders";
+import {
+  getOrders,
+  getUser,
+  getRiders,
+  createNewOrder,
+  changeStatus,
+  changeRider,
+  changePrice
+} from "../api/Orders";
 
 export const SORT_ORDERS = "SORT_ORDERS";
 export const SET_TOTAL_PAGES = "SET_TOTAL_PAGES";
@@ -59,7 +67,7 @@ export const CREATE_NEW_ORDER_FAILURE = "CREATE_NEW_ORDER_FAILURE";
 export const CREATE_NEW_ORDER_SUCCESS = "CREATE_NEW_ORDER_SUCCESS";
 export const RESET_MESSAGE = "RESET_MESSAGE";
 
-export const action = (type, payload, step=null) => ({
+export const action = (type, payload, step = null) => ({
   type,
   payload,
   step
@@ -117,7 +125,7 @@ export const createOrder = (dispatch, data, step) => {
   createNewOrder(
     res => {
       dispatch(action(CREATE_NEW_ORDER_SUCCESS, res.data.data, step));
-      fetchOrders(dispatch, 1)
+      fetchOrders(dispatch, 1);
     },
     err => {
       dispatch(action(CREATE_NEW_ORDER_FAILURE, err.response.data.error, step));
@@ -126,6 +134,110 @@ export const createOrder = (dispatch, data, step) => {
   );
 };
 
-export const resetMessages = (dispatch) => {
-  dispatch(action(RESET_MESSAGE))
-}
+export const resetMessages = dispatch => {
+  dispatch(action(RESET_MESSAGE));
+};
+
+export const cancelOrder = (dispatch, orderId) => {
+  dispatch(action(CANCEL_ORDER));
+  changeStatus(
+    res => {
+      dispatch(action(CANCEL_ORDER_SUCCESS, res.data.data));
+    },
+    err => {
+      dispatch(action(CANCEL_ORDER_FAILURE, err.response.data.error));
+    },
+    orderId,
+    "cancel",
+    "cancelled"
+  );
+};
+
+export const completeOrder = (dispatch, orderId) => {
+  dispatch(action(COMPLETE_ORDER));
+  changeStatus(
+    res => {
+      dispatch(action(COMPLETE_ORDER_SUCCESS, res.data.data));
+    },
+    err => {
+      dispatch(action(COMPLETE_ORDER_FAILURE, err.response.data.error));
+    },
+    orderId,
+    "complete",
+    "delivered"
+  );
+};
+
+export const confirmOrder = (dispatch, orderId) => {
+  dispatch(action(CONFIRM_ORDER));
+  changeStatus(
+    res => {
+      dispatch(action(CONFIRM_ORDER_SUCCESS, res.data.data));
+    },
+    err => {
+      dispatch(action(CONFIRM_ORDER_FAILURE, err.response.data.error));
+    },
+    orderId,
+    "confirm",
+    "confirmed"
+  );
+};
+
+export const acceptOrder = (dispatch, orderId) => {
+  dispatch(action(ACCEPT_ORDER));
+  changeStatus(
+    res => {
+      dispatch(action(ACCEPT_ORDER_SUCCESS, res.data.data));
+    },
+    err => {
+      dispatch(action(ACCEPT_ORDER_FAILURE, err.response.data.error));
+    },
+    orderId,
+    "accept",
+    "in transit"
+  );
+};
+
+export const rejectOrder = (dispatch, orderId) => {
+  dispatch(action(REJECT_ORDER));
+  changeRider(
+    res => {
+      dispatch(action(REJECT_ORDER_SUCCESS, res.data.data));
+    },
+    err => {
+      dispatch(action(REJECT_ORDER_FAILURE, err.response.data.error));
+    },
+    orderId,
+    "reject",
+    null
+  );
+};
+
+export const setPriceAsync = (dispatch, orderId, price) => {
+  dispatch(action(SET_PRICE));
+  changePrice(
+    res => {
+      dispatch(action(SET_PRICE_SUCCESS, res.data.data));
+    },
+    err => {
+      dispatch(action(SET_PRICE_FAILURE, err.response.data.error));
+    },
+    orderId,
+    price
+  );
+};
+
+export const assignRider = (dispatch, orderId, riderId) => {
+  dispatch(action(ASSIGN_ORDER));
+  changeRider(
+    res => {
+      dispatch(action(ASSIGN_ORDER_SUCCESS, res.data.data));
+    },
+    err => {
+      dispatch(action(ASSIGN_ORDER_FAILURE, err.response.data.error));
+    },
+    orderId,
+    "assign",
+    riderId
+  );
+};
