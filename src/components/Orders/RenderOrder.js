@@ -3,10 +3,9 @@ import { Link } from "react-router-dom";
 import { Icon, Button, Label, Table } from "semantic-ui-react";
 
 const RenderOrderItem = ({ order }) => {
-  Number.prototype.format = function(n, x) {
-    var re = "\\d(?=(\\d{" + (x || 3) + "})+" + (n > 0 ? "\\." : "$") + ")";
-    return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, "g"), "$&,");
-  };
+  function formatToNaira(x){
+    return x.toLocaleString('en-NG', { style: 'currency', currency: 'NGN' });
+  }
   return (
     <>
       <Table.Cell>
@@ -28,7 +27,7 @@ const RenderOrderItem = ({ order }) => {
         </Label>
       </Table.Cell>
       <Table.Cell>
-        <Label color="black">&#8358;{Number(order.price).format(2)}</Label>
+        <Label color="black">{formatToNaira(Number(order.price))}</Label>
       </Table.Cell>
       <Table.Cell>{new Date(order.createdAt).toDateString()}</Table.Cell>
       <Table.Cell>

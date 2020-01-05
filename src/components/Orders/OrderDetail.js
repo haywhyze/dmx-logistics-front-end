@@ -244,10 +244,9 @@ class OrderDetails extends React.Component {
       value: rider.id,
     }))
 
-    Number.prototype.format = function(n, x) {
-      var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
-      return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
-    };
+    function formatToNaira(x){
+      return x.toLocaleString('en-NG', { style: 'currency', currency: 'NGN' });
+    }
 
     return(
       <>
@@ -321,7 +320,7 @@ class OrderDetails extends React.Component {
               <Grid.Column textAlign='center' width={8}>
                 <Segment textAlign='center' className='dmx-color' inverted>
                   <Statistic size='tiny' className='dmx-color' inverted>
-                    <Statistic.Value>&#8358;{Number(this.props.order.price).format(2)}</Statistic.Value>
+                    <Statistic.Value>{formatToNaira(Number(this.props.order.price))}</Statistic.Value>
                     <Statistic.Label>Price</Statistic.Label>
                   </Statistic>
                 </Segment>
