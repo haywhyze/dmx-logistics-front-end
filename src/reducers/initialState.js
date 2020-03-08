@@ -10,6 +10,10 @@ export const initialState = {
   activePage: 1,
   totalPages: 1,
 
+  newRiderError: "",
+  newRiderLoading: false,
+  newRiderSuccess: false,
+
   newOrder: null,
   newOrderLoading: false,
   newOrderError: "",

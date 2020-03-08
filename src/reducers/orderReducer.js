@@ -62,6 +62,37 @@ export function orderReducer(state, action) {
         error: action.payload
       };
 
+    case type.CREATE_RIDER:
+      return {
+        ...state,
+        newRiderLoading: action.payload,
+        newRiderError: "",
+        newRiderSuccess: false
+      };
+
+    case type.CREATE_RIDER_SUCCESS:
+      return {
+        ...state,
+        riders: [...state.riders, action.payload],
+        newRiderLoading: false,
+        newRiderError: "",
+        newRiderSuccess: true
+      };
+
+    case type.CREATE_RIDER_FAILURE:
+      return {
+        ...state,
+        newRiderLoading: false,
+        newRiderError: action.payload,
+        newRiderSuccess: false
+      };
+
+    case type.RESET_RIDER_SUCCESS:
+      return {
+        ...state,
+        newRiderSuccess: false
+      };
+
     case type.SORT_ORDERS:
       return {
         ...state,

@@ -2,6 +2,7 @@ import {
   getOrders,
   getUser,
   getRiders,
+  createRider,
   createNewOrder,
   changeStatus,
   changeRider,
@@ -27,6 +28,7 @@ export const FETCH_RIDERS_FAILURE = "FETCH_RIDERS_FAILURE";
 export const CREATE_RIDER = "CREATE_RIDER";
 export const CREATE_RIDER_SUCCESS = "CREATE_RIDER_SUCCESS";
 export const CREATE_RIDER_FAILURE = "CREATE_RIDER_FAILURE";
+export const RESET_RIDER_SUCCESS = "RESET_RIDER_SUCCESS";
 
 export const UPDATE_PROFILE = "UPDATE_PROFILE";
 export const UPDATE_PROFILE_SUCCESS = "UPDATE_PROFILE_SUCCESS";
@@ -120,6 +122,19 @@ export const fetchRiders = (dispatch, userId) => {
   );
 };
 
+export const createNewRider = (dispatch, data) => {
+  dispatch(action(CREATE_RIDER, true));
+  createRider(
+    res => {
+      dispatch(action(CREATE_RIDER_SUCCESS, res.data.data));
+    },
+    err => {
+      dispatch(action(CREATE_RIDER_FAILURE, err.response.data));
+    },
+    data
+  );
+};
+
 export const createOrder = (dispatch, data, step) => {
   dispatch(action(CREATE_NEW_ORDER, data, step));
   createNewOrder(
@@ -137,6 +152,10 @@ export const createOrder = (dispatch, data, step) => {
 export const resetMessages = dispatch => {
   dispatch(action(RESET_MESSAGE));
 };
+
+export const resetRiderSuccess = dispatch => {
+  dispatch(action(RESET_RIDER_SUCCESS))
+}
 
 export const cancelOrder = (dispatch, orderId) => {
   dispatch(action(CANCEL_ORDER));

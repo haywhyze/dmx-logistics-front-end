@@ -32,6 +32,12 @@ export const getRiders = (success, failure, userId) => {
     .catch(error => failure(error));
 };
 
+export const createRider = (success, failure, data) => {
+  axiosWithAuth().post(`${baseUrl}/api/v1/auth/signup`, data)
+  .then(response => success(response))
+  .catch(error => failure(error))
+}
+
 export const createNewOrder = (success, failure, data) => {
   axiosWithAuth()
     .post(`${baseUrl}/api/v1/orders`, data)
