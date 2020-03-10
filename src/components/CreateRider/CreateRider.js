@@ -2,45 +2,11 @@ import React, { useContext } from "react";
 import { Header, Button, Message } from "semantic-ui-react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Redirect } from "react-router-dom";
+
 import { ContextOrders } from "../context/Orders";
-import * as Yup from "yup";
+import { createNewRider, resetRiderSuccess } from "../../Actions/orderActions";
+import valSchema from "./validationSchema";
 
-import {
-  createNewRider,
-  resetRiderSuccess
-} from "../../Actions/orderActions";
-
-const phoneRegExp = /^[+]?(\d{0,3})(\d{10})$/;
-const valSchema = Yup.object().shape({
-  firstName: Yup.string()
-    .min(2, "First name cannot be less than 2 characters")
-    .max(
-      50,
-      "First name provided is too long. Please provide in the range of 2 - 50 characters"
-    )
-    .required("First name is required"),
-  lastName: Yup.string()
-    .min(2, "Last name cannot be less than 2 characters")
-    .max(
-      50,
-      "Last name provided is too long. Please provide in the range of 2 - 50 characters"
-    )
-    .required("Last name is required"),
-  email: Yup.string()
-    .required("Email address is required to register")
-    .email("Please provide a valid email address"),
-  phoneNumber: Yup.string()
-    .required("Phone Number is Required")
-    .matches(phoneRegExp, "Please provide a valid phone number"),
-  password: Yup.string()
-    .required("Password is required")
-    .min(6, "Password must be at least 6 characters long")
-    .max(64, "Password too long!"),
-  confirmPassword: Yup.string().oneOf(
-    [Yup.ref("password"), null],
-    "Passwords must match"
-  )
-});
 const CreateRider = () => {
   const [state, dispatch] = useContext(ContextOrders);
   if (state && state.newRiderSuccess) resetRiderSuccess(dispatch);
@@ -54,19 +20,16 @@ const CreateRider = () => {
       />
     );
   }
-  
 
   return (
     <div
       className="main"
       style={{
-        width: "60%",
         display: "flex",
         flexDirection: "column",
         minHeight: "100vh",
         justifyContent: "center",
         alignItems: "center",
-        marginTop: "-2em"
       }}
     >
       <div>
@@ -83,12 +46,12 @@ const CreateRider = () => {
             confirmPassword: "",
             userRole: "rider"
           }}
-          onSubmit={(values, actions) => {
+          onSubmit={values => {
             createNewRider(dispatch, values);
           }}
           validationSchema={() => valSchema}
         >
-          {({ errors, touched, values, isSubmitting }) => {
+          {({ errors, touched }) => {
             return (
               <Form
                 className={
@@ -110,7 +73,6 @@ const CreateRider = () => {
                     <label>
                       First Name
                       <Field
-                        type="text"
                         name="firstName"
                         placeholder="Olawale"
                       />
@@ -127,7 +89,6 @@ const CreateRider = () => {
                     <label>
                       Last Name
                       <Field
-                        type="text"
                         name="lastName"
                         placeholder="Chinedu"
                       />
@@ -161,7 +122,6 @@ const CreateRider = () => {
                     <label>
                       Phone Number
                       <Field
-                        type="text"
                         name="phoneNumber"
                         placeholder="08031234567/+234708123456"
                       />
