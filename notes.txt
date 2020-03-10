@@ -46,3 +46,6 @@ assignOrder - change status of provided order id
 login - login 
 signUp - token
 logout - destroy token
+
+
+when you are on a single order and you refresh page, the page might be empty as the order might not be on the first page.
