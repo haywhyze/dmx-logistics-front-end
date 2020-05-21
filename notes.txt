@@ -1,0 +1,51 @@
+ordersReducer: 
+    initialState = {
+        isLoading: false,
+        orders: [],
+        user: {},
+        riders: [],
+        ordered: {
+            id: false,
+            status: false,
+            date: false,
+            price: false,
+        }
+        activePage: 1,
+        totalPages: 1,
+        error: ''
+    }
+authenticationReducer: 
+    initialState = {
+        isLoading: false,
+        token: '',
+        loginError: '',
+        signupError: '',
+        userId: '',
+    }
+
+
+Actions on the orders
+
+getOrders - get all orders replace the order array >>
+getUserAccount - replace the user object >>
+getRiders - replace the riders array >>
+
+createOrder - concat new order to beginning of orders
+createRider - signup and add to list of riders
+
+updateProfile - change the user profile
+
+cancelOrder - change status of provided order id
+confirmOrder - change status of provided order id
+completeOrder - change status of provided order id
+acceptOrder - change status of provided order id
+rejectOrder - change status of provided order id
+setPrice - change status of provided order id
+assignOrder - change status of provided order id
+
+login - login 
+signUp - token
+logout - destroy token
+
+
+when you are on a single order and you refresh page, the page might be empty as the order might not be on the first page.

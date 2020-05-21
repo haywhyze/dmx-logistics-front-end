@@ -1,25 +1,28 @@
 /* eslint-disable react/prefer-stateless-function */
-import React, { Component } from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import ConfigureStore from './redux/configureStore';
-import Main from './components/Main';
-import './App.css';
+import React from "react";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+import NotFound from "./components/404";
+import Main from "./components/Main";
+import Login from "./components/Login/Login";
+import SignUp from "./components/SignUp/SignUp";
+import "./App.css";
 
-const store = ConfigureStore();
-
-class App extends Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <BrowserRouter basename={process.env.PUBLIC_URL}>
-          <div>
-            <Main />
-          </div>
-        </BrowserRouter>
-      </Provider>
-    );
-  }
-}
+const App = () => {
+  let routes = (
+    <>
+      <Switch>
+        <Route path="/login" component={Login} />
+        <Route path="/register" component={SignUp} />
+        <Route path="/404" component={NotFound} />
+        <Main />
+      </Switch>
+    </>
+  );
+  return (
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
+      <div>{routes}</div>
+    </BrowserRouter>
+  );
+};
 
 export default App;

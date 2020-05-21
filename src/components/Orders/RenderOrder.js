@@ -1,61 +1,69 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Icon, Button, Label, Table } from 'semantic-ui-react'
+import React from "react";
+import { Link } from "react-router-dom";
+import { Icon, Button, Label, Table } from "semantic-ui-react";
+
+export function formatToNaira(x) {
+  return x.toLocaleString("en-NG", { style: "currency", currency: "NGN" });
+}
 
 const RenderOrderItem = ({ order }) => {
-  Number.prototype.format = function(n, x) {
-      var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
-      return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
-    };
   return (
-      <>
+    <>
       <Table.Cell>
-        <Label 
-          color={ 
-            order.status === 'processing' ? 
-              "blue" : 
-            order.status === 'confirmed' ? 
-              "orange" :
-            order.status === 'in transit' ?
-              "teal" :
-            order.status === 'delivered' ?
-              "green" : "black" 
-            } 
-          ribbon>
+        <Label
+          color={
+            order.status === "processing"
+              ? "blue"
+              : order.status === "confirmed"
+              ? "orange"
+              : order.status === "in transit"
+              ? "teal"
+              : order.status === "delivered"
+              ? "green"
+              : "black"
+          }
+          ribbon
+        >
           {order.id}
         </Label>
       </Table.Cell>
       <Table.Cell>
-        <Label color="black">
-        &#8358;{Number(order.price).format(2)}
-        </Label>
-        </Table.Cell>
+        <Label color="black">{formatToNaira(Number(order.price))}</Label>
+      </Table.Cell>
       <Table.Cell>{new Date(order.createdAt).toDateString()}</Table.Cell>
       <Table.Cell>
-      {     
-        order.status === 'processing' ? 
-          (<p><Icon name="wait" /> Processing</p>) : 
-        order.status === 'confirmed' ? 
-          (<p><Icon name="checkmark" /> Confirmed</p>) :
-        order.status === 'in transit' ?
-          (<p><Icon name="bicycle" /> In Transit</p>) :
-        order.status === 'delivered' ?
-        (<p><Icon name="checkmark" /> Delivered</p>) : 
-        (<p><Icon name="x" /> Cancelled</p>)
-      }
+        {order.status === "processing" ? (
+          <p>
+            <Icon name="wait" /> Processing
+          </p>
+        ) : order.status === "confirmed" ? (
+          <p>
+            <Icon name="checkmark" /> Confirmed
+          </p>
+        ) : order.status === "in transit" ? (
+          <p>
+            <Icon name="bicycle" /> In Transit
+          </p>
+        ) : order.status === "delivered" ? (
+          <p>
+            <Icon name="checkmark" /> Delivered
+          </p>
+        ) : (
+          <p>
+            <Icon name="x" /> Cancelled
+          </p>
+        )}
       </Table.Cell>
       <Table.Cell>
         <Link to={`/orders/${order.id}`}>
-          <Button className="dmx-color" animated='vertical'>
+          <Button className="dmx-color" animated="vertical">
             <Button.Content hidden>Detailed View</Button.Content>
-            <Button.Content visible>
-              Show More
-            </Button.Content>
+            <Button.Content visible>Show More</Button.Content>
           </Button>
         </Link>
       </Table.Cell>
     </>
   );
-}
+};
 
 export default RenderOrderItem;

@@ -1,137 +1,117 @@
-import React, { Component } from 'react';
-import SenderDetails from './SenderDetails';
-import RecipientDetails from './RecipientDetails';
-import OrderDetails from './OrderDetails';
-import Confirmation from './Confirmation';
-import Success from './Success';
+import React, { useState, useContext } from "react";
+import OrderDetails from "./OrderDetails";
+import Confirmation from "./Confirmation";
+import Success from "./Success";
+import { ContextOrders } from "../context/Orders";
+import SenderReceiverDetails from "./SenderReceiverDetails";
 
-class NewOrder extends Component {
-    state = {
-        step: 1,
+const NewOrderContainer = ({ location }) => {
+  const [{ user, globalStep, newOrder }] = useContext(ContextOrders);
 
-        senderName: '',
-        senderPhone: '',
-        senderEmail: '',
-        senderAddress: this.props.user.address || '',
-        senderState: '',
-        senderCountry: '',
-        
-        recipientName: '',
-        recipientPhone: '',
-        recipientEmail: '',
-        recipientAddress: '',
-        recipientState: '',
-        recipientCountry: '',
-        
-        itemDescription: '',
-        paymentStatus: '',
-        weight: 1,
-        extraInfo: '',
-        priceEstimate: '',
-    }
+  const [step, setStep] = useState(globalStep || 1);
 
-    nextStep = () => {
-        const { step } = this.state
-        this.setState({
-            step : step + 1
-        })
-    }
+  const [locationState, setLocationState] = useState({
+    senderAddress: user.address || "",
+    senderState: "",
+    senderCountry: "",
 
-    prevStep = () => {
-        const { step } = this.state
-        this.setState({
-            step : step - 1
-        })
-    }
-    
-    updateState = values => {
-        this.setState({
-            ...values,
-        })
-    }
-    handleChange = input => event => {
-        this.setState({ [input] : event.target.value })
-    }
+    recipientAddress: (newOrder && newOrder.recipientAddress) || "",
+    recipientState: "",
+    recipientCountry: ""
+  });
 
-    render(){
-        const {step} = this.state;
-        const { 
-            senderName,
-            senderPhone,
-            senderEmail,
-            senderAddress,
-            senderState,
-            senderCountry,
-            srcData,
-            recipientName,
-            recipientPhone,
-            recipientEmail,
-            recipientAddress,
-            recipientState,
-            recipientCountry,
-            destData,
-            itemDescription,
-            paymentStatus,
-            weight,
-            extraInfo,
-         } = this.state;
-        const values = { 
-            senderName,
-            senderPhone,
-            senderEmail,
-            senderAddress,
-            senderState,
-            senderCountry,
-            srcData,
-            recipientName,
-            recipientPhone,
-            recipientEmail,
-            recipientAddress,
-            recipientState,
-            recipientCountry,
-            destData,
-            itemDescription,
-            paymentStatus,
-            weight,
-            extraInfo,
-         };
-        switch(step) {
-        case 1:
-            return <SenderDetails 
-                    nextStep={this.nextStep} 
-                    updateState = {this.updateState}
-                    handleChange = {this.handleChange}
-                    values={values}
-                    user={this.props.user}
-                    />
-        case 2:
-            return <RecipientDetails 
-                    nextStep={this.nextStep}
-                    prevStep={this.prevStep}
-                    updateState = {this.updateState}
-                    handleChange = {this.handleChange}
-                    values={values}
-                    user={this.props.user}
-                    />
-        case 3:
-          return <OrderDetails 
-                  nextStep={this.nextStep}
-                  prevStep={this.prevStep}
-                  updateState = {this.updateState}
-                  values={values}
-                  />
-        case 4:
-            return <Confirmation 
-                    nextStep={this.nextStep}
-                    prevStep={this.prevStep}
-                    values={values}
-                    location={this.props.location}
-                    />
-        case 5:
-            return <Success />
-        default: return null
-        }
-    }
-}
+  const [state, setState] = useState({
+    senderName: `${user.firstName} ${user.lastName}` || "",
+    senderPhone: user.phoneNumber || "",
+    senderEmail: user.email || "",
 
-export default NewOrder;
+    recipientName: (newOrder && newOrder.recipientName) || "",
+    recipientPhone: (newOrder && newOrder.recipientPhone) || "",
+    recipientEmail: (newOrder && newOrder.recipientEmail) || "",
+
+    itemDescription: (newOrder && newOrder.itemDescription) || "",
+    paymentStatus: (newOrder && newOrder.paymentStatus) || "",
+    weight: (newOrder && newOrder.weight) || 1,
+    extraInfo: (newOrder && newOrder.extraInfo) || "",
+    priceEstimate: ""
+  });
+
+  const nextStep = () => setStep(step + 1);
+
+  const prevStep = () => setStep(step - 1);
+
+  const updateLocation = data => {
+    setLocationState({
+      ...locationState,
+      ...data
+    });
+  };
+
+  const updateState = data => {
+    setState({
+      ...state,
+      ...data
+    });
+  };
+
+  const handleChange = input => event => {
+    setLocationState({ ...locationState, [input]: event.target.value });
+  };
+
+  switch (step) {
+    case 1:
+      return (
+        <SenderReceiverDetails
+          nextStep={nextStep}
+          data={state}
+          sender={true}
+          updateState={updateState}
+          handleChange={handleChange}
+          updateLocation={updateLocation}
+          locationData={locationState}
+          prevStep={prevStep}
+        />
+      );
+    case 2:
+      return (
+        <SenderReceiverDetails
+          nextStep={nextStep}
+          data={state}
+          sender={false}
+          updateState={updateState}
+          handleChange={handleChange}
+          updateLocation={updateLocation}
+          locationData={locationState}
+          prevStep={prevStep}
+        />
+      );
+    case 3:
+      return (
+        <OrderDetails
+          nextStep={nextStep}
+          prevStep={prevStep}
+          data={state}
+          locationData={locationState}
+          updateState={updateState}
+        />
+      );
+    case 4:
+      return (
+        <Confirmation
+          nextStep={nextStep}
+          prevStep={prevStep}
+          data={state}
+          locationData={locationState}
+          updateState={updateState}
+          location={location}
+          step={step}
+        />
+      );
+    case 5:
+      return <Success />;
+    default:
+      return null;
+  }
+};
+
+export default NewOrderContainer;
