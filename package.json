@@ -9,7 +9,7 @@
     "font-awesome": "^4.7.0",
     "formik": "^1.5.1",
     "jwt-decode": "^2.2.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "prop-types": "^15.7.2",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
